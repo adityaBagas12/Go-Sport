@@ -22,18 +22,18 @@
             </a>
 
             <div class="relative">
-                <h2 class="text-4xl font-black leading-tight">Lengkapi Perlengkapan Olahragamu Bersama GoSport</h2>
-                <p class="mt-4 max-w-md text-blue-100/80">Temukan produk olahraga berkualitas dengan harga terbaik untuk pria, wanita, dan anak.</p>
+                <h2 class="text-4xl font-black leading-tight text-white">Lengkapi Perlengkapan Olahragamu Bersama GoSport</h2>
+                <p class="mt-4 max-w-md text-blue-100/90">Temukan produk olahraga berkualitas dengan harga terbaik untuk pria, wanita, dan anak.</p>
                 <div class="mt-8 flex flex-wrap gap-6">
                     @foreach ([['truck', 'Gratis Ongkir'], ['shield', '100% Original'], ['refresh', 'Retur 7 Hari']] as [$icon, $label])
-                        <div class="flex items-center gap-2 text-sm font-semibold text-blue-100">
+                        <div class="flex items-center gap-2 text-sm font-semibold text-white">
                             <x-icon :name="$icon" class="h-5 w-5 text-[#FF7A00]" /> {{ $label }}
                         </div>
                     @endforeach
                 </div>
             </div>
 
-            <p class="relative text-xs text-blue-200/60">&copy; {{ date('Y') }} GoSport. Seluruh hak cipta dilindungi.</p>
+            <p class="relative text-xs text-blue-200">&copy; {{ date('Y') }} GoSport. Seluruh hak cipta dilindungi.</p>
         </div>
 
         <div class="flex items-center justify-center p-6 sm:p-12">
