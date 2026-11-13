@@ -11,11 +11,11 @@
             @endforeach
         </div>
     @else
-        <div class="rounded-3xl border border-dashed border-neutral-200 bg-white py-20 text-center">
-            <x-icon name="heart" class="mx-auto h-14 w-14 text-neutral-300" />
-            <h2 class="mt-4 text-xl font-bold text-neutral-900">Wishlist kamu masih kosong</h2>
+        <div class="rounded-3xl border border-[#8CC4FF] bg-white py-20 text-center shadow-sm">
+            <x-icon name="heart" class="mx-auto h-14 w-14 text-[#8CC4FF]" />
+            <h2 class="mt-4 text-xl font-bold text-[#0A2A5E]">Wishlist kamu masih kosong</h2>
             <p class="mt-1 text-sm text-neutral-500">Simpan produk favoritmu agar mudah ditemukan nanti.</p>
-            <a href="{{ route('products.index') }}" class="mt-6 inline-flex rounded-xl bg-brand-500 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-brand-600">
+            <a href="{{ route('products.index') }}" class="mt-6 inline-flex rounded-xl bg-[#FF7A00] px-7 py-3.5 text-sm font-bold text-[#10213F] shadow-sm transition hover:brightness-105">
                 Jelajahi Produk
             </a>
         </div>

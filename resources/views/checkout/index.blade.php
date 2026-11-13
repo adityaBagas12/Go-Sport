@@ -3,14 +3,14 @@
 @section('title', 'Checkout - GoSport')
 
 @section('content')
-    <div class="border-b border-neutral-200 bg-white">
+    <div class="border-b border-[#8CC4FF]/40 bg-white">
         <div class="container-page py-8">
-            <nav class="flex items-center gap-2 text-sm text-neutral-500">
-                <a href="{{ route('cart.index') }}" class="hover:text-brand-600">Keranjang</a>
-                <x-icon name="chevron-right" class="h-4 w-4" />
-                <span class="font-medium text-neutral-900">Checkout</span>
+            <nav class="flex items-center gap-2 text-sm text-[#0A6CFF]">
+                <a href="{{ route('cart.index') }}" class="hover:text-[#3D9BFF]">Keranjang</a>
+                <x-icon name="chevron-right" class="h-4 w-4 text-[#8CC4FF]" />
+                <span class="font-bold text-[#0A2A5E]">Checkout</span>
             </nav>
-            <h1 class="mt-3 text-3xl font-extrabold text-neutral-900">Checkout</h1>
+            <h1 class="mt-3 text-3xl font-extrabold text-[#0A2A5E]">Checkout</h1>
         </div>
     </div>
 
@@ -68,7 +68,7 @@
                                 @endforeach
                             </select>
                             @error('province')
-                                <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                <p class="mt-1 text-xs text-[#E53935]">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
@@ -178,15 +178,16 @@
                             <dt class="text-neutral-500">Biaya Pengiriman</dt>
                             <dd class="font-semibold text-neutral-900" id="summary-shipping">-</dd>
                         </div>
-                        <div class="flex justify-between border-t border-neutral-100 pt-3 text-base">
-                            <dt class="font-bold text-neutral-900">Total Pembayaran</dt>
-                            <dd class="font-black text-brand-600" id="summary-total">{{ 'Rp ' . number_format(max($subtotal - $discount, 0), 0, ',', '.') }}</dd>
+                        <div class="flex justify-between border-t border-[#8CC4FF]/40 pt-3 text-base">
+                            <dt class="font-bold text-[#10213F]">Total Pembayaran</dt>
+                            <dd class="font-black text-[#0A2A5E]" id="summary-total">{{ 'Rp ' . number_format(max($subtotal - $discount, 0), 0, ',', '.') }}</dd>
                         </div>
                     </dl>
 
+                    {{-- Tombol Aksen: Checkout #FF7A00 dengan teks #10213F --}}
                     <button type="submit"
-                        class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-500/30 transition hover:bg-brand-600">
-                        Buat Pesanan <x-icon name="arrow-right" class="h-5 w-5" />
+                        class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#FF7A00] px-6 py-3.5 text-sm font-black text-[#10213F] shadow-lg shadow-[#FF7A00]/30 transition hover:bg-[#ff8f26]">
+                        Buat Pesanan & Bayar <x-icon name="arrow-right" class="h-5 w-5 text-[#10213F]" />
                     </button>
                     <p class="mt-3 text-center text-xs text-neutral-400">Dengan membuat pesanan, kamu menyetujui syarat & ketentuan GoSport.</p>
                 </div>

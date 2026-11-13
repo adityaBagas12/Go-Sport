@@ -12,7 +12,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
 </head>
-<body class="min-h-screen flex flex-col bg-neutral-50">
+<body class="min-h-screen flex flex-col bg-[#F4F8FF] text-[#10213F]">
     @include('partials.header')
 
     @include('partials.flash')

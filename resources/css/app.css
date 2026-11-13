@@ -7,16 +7,47 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 
-    --color-brand-50: #fff7ed;
-    --color-brand-100: #ffedd5;
-    --color-brand-200: #fed7aa;
-    --color-brand-300: #fdba74;
-    --color-brand-400: #fb923c;
-    --color-brand-500: #f97316;
-    --color-brand-600: #ea580c;
-    --color-brand-700: #c2410c;
-    --color-brand-800: #9a3412;
-    --color-brand-900: #7c2d12;
+    /* PALET WARNA BARU */
+    /* Primer (navigasi, link, tombol sekunder, ikon): #0A6CFF */
+    --color-primer: #0A6CFF;
+    --color-primer-hover: #3D9BFF;
+
+    /* Sekunder (header, footer, judul, bagian hero): #0A2A5E */
+    --color-sekunder: #0A2A5E;
+    --color-sekunder-dark: #071E43;
+
+    /* Aksen (tombol "Beli"/"Checkout", badge diskon, label promo): #FF7A00, teks gelap #10213F */
+    --color-aksen: #FF7A00;
+    --color-aksen-hover: #ff8f26;
+    --color-aksen-text: #10213F;
+
+    /* Latar halaman: #F4F8FF */
+    --color-bg-page: #F4F8FF;
+
+    /* Permukaan kartu/section selang-seling: #FFFFFF dan #E6F1FF */
+    --color-surface-white: #FFFFFF;
+    --color-surface-alt: #E6F1FF;
+
+    /* Border/garis: #8CC4FF */
+    --color-line: #8CC4FF;
+
+    /* Teks utama: #10213F */
+    --color-text-main: #10213F;
+
+    /* Merah (#E53935) hanya untuk error, stok habis, dan validasi form */
+    --color-danger-main: #E53935;
+
+    /* Penyelarasan --color-brand-* ke palet baru */
+    --color-brand-50: #E6F1FF;
+    --color-brand-100: #cbe3ff;
+    --color-brand-200: #8CC4FF;
+    --color-brand-300: #62aeff;
+    --color-brand-400: #3D9BFF;
+    --color-brand-500: #0A6CFF;
+    --color-brand-600: #0856cc;
+    --color-brand-700: #064099;
+    --color-brand-800: #042d6b;
+    --color-brand-900: #0A2A5E;
 
     --animate-fade-up: fade-up 0.5s ease-out both;
     --animate-marquee: marquee 30s linear infinite;
@@ -35,9 +66,11 @@
 
 @keyframes marquee {
     from {
+        opacity: 0;
         transform: translateX(0);
     }
     to {
+        opacity: 1;
         transform: translateX(-50%);
     }
 }
@@ -48,11 +81,23 @@
     }
 
     body {
-        @apply bg-white text-neutral-900 antialiased;
+        background-color: #F4F8FF;
+        color: #10213F;
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: #0A2A5E;
     }
 
     [x-cloak] {
         display: none !important;
+    }
+
+    input[type='checkbox'],
+    input[type='radio'] {
+        accent-color: #0A6CFF;
     }
 }
 
@@ -82,7 +127,44 @@
     overflow: hidden;
 }
 
-input[type='checkbox'],
-input[type='radio'] {
-    accent-color: var(--color-brand-500);
+/* PALET KUSTOM KELAS PEMBANTU */
+.bg-page {
+    background-color: #F4F8FF;
+}
+
+.bg-surface-white {
+    background-color: #FFFFFF;
+}
+
+.bg-surface-alt {
+    background-color: #E6F1FF;
+}
+
+.border-line {
+    border-color: #8CC4FF;
+}
+
+.btn-accent {
+    background-color: #FF7A00;
+    color: #10213F;
+    font-weight: 800;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-accent:hover {
+    background-color: #ff8f26;
+    color: #10213F;
+}
+
+.badge-discount,
+.badge-promo {
+    background-color: #FF7A00;
+    color: #10213F;
+    font-weight: 800;
+}
+
+.badge-out-of-stock {
+    background-color: #E53935;
+    color: #FFFFFF;
+    font-weight: 700;
 }

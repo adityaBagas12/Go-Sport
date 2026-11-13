@@ -3,11 +3,11 @@
 @section('title', 'Kontak - GoSport')
 
 @section('content')
-    <div class="border-b border-neutral-200 bg-white">
+    <div class="border-b border-[#8CC4FF]/30 bg-white">
         <div class="container-page py-10 text-center">
-            <p class="text-sm font-bold uppercase tracking-wider text-brand-500">Kontak</p>
-            <h1 class="mt-2 text-3xl font-extrabold text-neutral-900 sm:text-4xl">Hubungi GoSport</h1>
-            <p class="mx-auto mt-3 max-w-xl text-neutral-500">
+            <p class="text-sm font-bold uppercase tracking-wider text-[#0A6CFF]">Kontak</p>
+            <h1 class="mt-2 text-3xl font-extrabold text-[#0A2A5E] sm:text-4xl">Hubungi GoSport</h1>
+            <p class="mx-auto mt-3 max-w-xl text-neutral-600">
                 Ada pertanyaan tentang produk, pesanan, atau pengiriman? Tim kami siap membantu.
             </p>
         </div>
@@ -21,12 +21,12 @@
                 ['mail', 'Email', 'cs@gosport.id / support@gosport.id'],
                 ['clock', 'Jam Operasional', 'Senin - Minggu, 08.00 - 21.00 WIB'],
             ] as [$icon, $title, $desc])
-                <div class="flex items-start gap-4 rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm">
-                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-500">
+                <div class="flex items-start gap-4 rounded-2xl border border-[#8CC4FF] bg-white p-5 shadow-sm">
+                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#E6F1FF] text-[#0A6CFF]">
                         <x-icon :name="$icon" class="h-6 w-6" />
                     </span>
                     <div>
-                        <p class="text-sm font-bold text-neutral-900">{{ $title }}</p>
+                        <p class="text-sm font-bold text-[#10213F]">{{ $title }}</p>
                         <p class="mt-1 text-sm text-neutral-500">{{ $desc }}</p>
                     </div>
                 </div>
@@ -34,35 +34,35 @@
 
             <div class="flex gap-3">
                 @foreach (['facebook', 'instagram', 'youtube', 'whatsapp'] as $social)
-                    <a href="#" class="grid h-11 w-11 place-items-center rounded-xl bg-neutral-900 text-white transition hover:bg-brand-500">
+                    <a href="#" class="grid h-11 w-11 place-items-center rounded-xl bg-[#0A2A5E] text-white transition hover:bg-[#0A6CFF]">
                         <x-icon :name="$social" class="h-5 w-5" />
                     </a>
                 @endforeach
             </div>
         </div>
 
-        <div class="rounded-3xl border border-neutral-100 bg-white p-7 shadow-sm">
-            <h2 class="text-xl font-extrabold text-neutral-900">Kirim Pesan</h2>
+        <div class="rounded-3xl border border-[#8CC4FF] bg-white p-7 shadow-sm">
+            <h2 class="text-xl font-extrabold text-[#0A2A5E]">Kirim Pesan</h2>
             <form class="mt-6 space-y-4" onsubmit="event.preventDefault(); this.reset(); alert('Pesan kamu sudah terkirim. Tim GoSport akan segera menghubungi kamu.');">
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="text-sm font-semibold text-neutral-700">Nama Lengkap</label>
-                        <input type="text" required class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                        <label class="text-sm font-semibold text-[#10213F]">Nama Lengkap</label>
+                        <input type="text" required class="mt-1.5 w-full rounded-xl border border-[#8CC4FF]/60 bg-[#F4F8FF] px-4 py-3 text-sm outline-none focus:border-[#0A6CFF] focus:bg-white">
                     </div>
                     <div>
-                        <label class="text-sm font-semibold text-neutral-700">Email</label>
-                        <input type="email" required class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                        <label class="text-sm font-semibold text-[#10213F]">Email</label>
+                        <input type="email" required class="mt-1.5 w-full rounded-xl border border-[#8CC4FF]/60 bg-[#F4F8FF] px-4 py-3 text-sm outline-none focus:border-[#0A6CFF] focus:bg-white">
                     </div>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-neutral-700">Subjek</label>
-                    <input type="text" required class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                    <label class="text-sm font-semibold text-[#10213F]">Subjek</label>
+                    <input type="text" required class="mt-1.5 w-full rounded-xl border border-[#8CC4FF]/60 bg-[#F4F8FF] px-4 py-3 text-sm outline-none focus:border-[#0A6CFF] focus:bg-white">
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-neutral-700">Pesan</label>
-                    <textarea rows="5" required class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white"></textarea>
+                    <label class="text-sm font-semibold text-[#10213F]">Pesan</label>
+                    <textarea rows="5" required class="mt-1.5 w-full rounded-xl border border-[#8CC4FF]/60 bg-[#F4F8FF] px-4 py-3 text-sm outline-none focus:border-[#0A6CFF] focus:bg-white"></textarea>
                 </div>
-                <button type="submit" class="w-full rounded-xl bg-brand-500 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-brand-600">
+                <button type="submit" class="w-full rounded-xl bg-[#0A6CFF] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#3D9BFF]">
                     Kirim Pesan
                 </button>
             </form>

@@ -61,11 +61,11 @@
                 aria-label="{{ $point['tooltip'] }} - {{ $point['revenue_label'] }}"></span>
 
             <span
-                class="pointer-events-none absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-brand-500 opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+                class="pointer-events-none absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#0A6CFF] opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
                 style="top: {{ $coordinate['y'] }}%;"></span>
 
             <span
-                class="pointer-events-none absolute bottom-full z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-neutral-900 px-2 py-1 text-[10px] font-bold text-white group-hover:block group-focus-within:block">
+                class="pointer-events-none absolute bottom-full z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-[#0A2A5E] px-2.5 py-1 text-[11px] font-bold text-white shadow-md group-hover:block group-focus-within:block">
                 {{ $point['tooltip'] }} &middot; {{ $point['revenue_label'] }}
             </span>
         </div>

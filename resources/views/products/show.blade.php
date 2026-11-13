@@ -40,37 +40,37 @@
                             {{ ['baru' => 'Baru', 'terlaris' => 'Terlaris', 'promo' => 'Promo'][$product->badge] ?? $product->badge }}
                         </span>
                     @endif
-                    <span class="rounded-full bg-brand-50 px-3 py-1 text-xs font-bold text-brand-600">{{ $product->category->name }}</span>
+                    <span class="rounded-full bg-[#E6F1FF] px-3 py-1 text-xs font-bold text-[#0A6CFF]">{{ $product->category->name }}</span>
                     @if ($product->is_discounted)
-                        <span class="rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white">Diskon {{ $product->discount_percent }}%</span>
+                        <span class="rounded-full bg-[#FF7A00] px-3 py-1 text-xs font-black text-[#10213F]">Diskon {{ $product->discount_percent }}%</span>
                     @endif
                 </div>
 
-                <h1 class="mt-4 text-3xl font-extrabold leading-tight text-neutral-900">{{ $product->name }}</h1>
+                <h1 class="mt-4 text-3xl font-extrabold leading-tight text-[#0A2A5E]">{{ $product->name }}</h1>
 
                 <div class="mt-4 flex flex-wrap items-center gap-4 text-sm">
                     <span class="flex items-center gap-1.5">
-                        <span class="flex items-center gap-0.5 text-amber-400">
+                        <span class="flex items-center gap-0.5 text-amber-500">
                             @for ($i = 1; $i <= 5; $i++)
                                 <x-icon :name="$i <= round($product->rating) ? 'star' : 'star-outline'" class="h-4 w-4" />
                             @endfor
                         </span>
-                        <span class="font-bold text-neutral-900">{{ number_format($product->rating, 1) }}</span>
+                        <span class="font-bold text-[#0A2A5E]">{{ number_format($product->rating, 1) }}</span>
                         <span class="text-neutral-400">({{ $ratingCount }} review)</span>
                     </span>
-                    <span class="h-4 w-px bg-neutral-200"></span>
-                    <span class="text-neutral-500"><span class="font-semibold text-neutral-900">{{ number_format($product->sold, 0, ',', '.') }}</span> terjual</span>
-                    <span class="h-4 w-px bg-neutral-200"></span>
-                    <span class="{{ $product->stock > 0 ? 'text-green-600' : 'text-red-600' }} font-semibold">
+                    <span class="h-4 w-px bg-[#8CC4FF]/50"></span>
+                    <span class="text-neutral-500"><span class="font-semibold text-[#0A2A5E]">{{ number_format($product->sold, 0, ',', '.') }}</span> terjual</span>
+                    <span class="h-4 w-px bg-[#8CC4FF]/50"></span>
+                    <span class="{{ $product->stock > 0 ? 'text-[#0A6CFF]' : 'text-[#E53935]' }} font-bold">
                         {{ $product->stock > 0 ? "Stok: {$product->stock}" : 'Stok Habis' }}
                     </span>
                 </div>
 
-                <div class="mt-6 flex flex-wrap items-end gap-3 rounded-2xl bg-neutral-50 px-5 py-4">
-                    <span class="text-4xl font-black text-neutral-900">{{ $product->price_label }}</span>
+                <div class="mt-6 flex flex-wrap items-end gap-3 rounded-2xl border border-[#8CC4FF]/50 bg-[#E6F1FF] px-5 py-4">
+                    <span class="text-4xl font-black text-[#0A2A5E]">{{ $product->price_label }}</span>
                     @if ($product->is_discounted)
                         <span class="pb-1 text-base text-neutral-400 line-through">{{ 'Rp ' . number_format($product->compare_price, 0, ',', '.') }}</span>
-                        <span class="pb-1 text-sm font-semibold text-red-500">Hemat {{ 'Rp ' . number_format($product->compare_price - $product->price, 0, ',', '.') }}</span>
+                        <span class="pb-1 text-sm font-bold text-[#FF7A00]">Hemat {{ 'Rp ' . number_format($product->compare_price - $product->price, 0, ',', '.') }}</span>
                     @endif
                 </div>
 
@@ -132,11 +132,11 @@
 
                     <div class="flex flex-col gap-3 sm:flex-row">
                         <button type="submit" name="redirect" value="cart" @disabled($product->stock <= 0)
-                            class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-neutral-900 px-6 py-3.5 text-sm font-bold text-neutral-900 transition hover:bg-neutral-900 hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
+                            class="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-[#0A6CFF] bg-white px-6 py-3.5 text-sm font-bold text-[#0A6CFF] transition hover:bg-[#0A6CFF] hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
                             <x-icon name="cart" class="h-5 w-5" /> Tambah ke Keranjang
                         </button>
                         <button type="submit" name="redirect" value="checkout" @disabled($product->stock <= 0)
-                            class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-500/30 transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40">
+                            class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#FF7A00] px-6 py-3.5 text-sm font-black text-[#10213F] shadow-lg shadow-[#FF7A00]/30 transition hover:bg-[#ff8f26] disabled:cursor-not-allowed disabled:opacity-40">
                             Beli Sekarang
                         </button>
                     </div>
@@ -145,23 +145,23 @@
                 <div class="mt-5 flex items-center gap-3">
                     <form action="{{ route('wishlist.toggle', $product) }}" method="POST">
                         @csrf
-                        <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-neutral-200 px-4 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-brand-500 hover:text-brand-600">
-                            <x-icon name="heart" class="h-5 w-5 {{ $wishlisted ? 'fill-brand-500 text-brand-500' : '' }}" />
+                        <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-[#8CC4FF] bg-white px-4 py-2.5 text-sm font-semibold text-[#0A2A5E] transition hover:border-[#0A6CFF] hover:text-[#0A6CFF]">
+                            <x-icon name="heart" class="h-5 w-5 {{ $wishlisted ? 'fill-[#0A6CFF] text-[#0A6CFF]' : 'text-[#0A6CFF]' }}" />
                             {{ $wishlisted ? 'Tersimpan di Wishlist' : 'Simpan ke Wishlist' }}
                         </button>
                     </form>
                 </div>
 
-                <div class="mt-7 grid gap-4 rounded-2xl border border-neutral-100 bg-white p-5 shadow-sm sm:grid-cols-3">
+                <div class="mt-7 grid gap-4 rounded-2xl border border-[#8CC4FF] bg-white p-5 shadow-sm sm:grid-cols-3">
                     @foreach ([
                         ['truck', 'Pengiriman', 'JNE, J&T, SiCepat, POS'],
                         ['shield', 'Garansi', '100% original & bergaransi'],
                         ['refresh', 'Retur', '7 hari pengembalian'],
                     ] as [$icon, $title, $desc])
                         <div class="flex items-start gap-3">
-                            <x-icon :name="$icon" class="mt-0.5 h-6 w-6 shrink-0 text-brand-500" />
+                            <x-icon :name="$icon" class="mt-0.5 h-6 w-6 shrink-0 text-[#0A6CFF]" />
                             <div>
-                                <p class="text-sm font-bold text-neutral-900">{{ $title }}</p>
+                                <p class="text-sm font-bold text-[#0A2A5E]">{{ $title }}</p>
                                 <p class="text-xs text-neutral-500">{{ $desc }}</p>
                             </div>
                         </div>
