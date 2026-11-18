@@ -47,6 +47,47 @@ class Product extends Model
         return $this->hasMany(CartItem::class);
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function hasVariants(): bool
+    {
+        return $this->relationLoaded('variants')
+            ? $this->variants->isNotEmpty()
+            : $this->variants()->exists();
+    }
+
+    public function findVariant(?string $size, ?string $color): ?ProductVariant
+    {
+        $variants = $this->relationLoaded('variants')
+            ? $this->variants
+            : $this->variants()->get();
+
+        return $variants->first(function (ProductVariant $variant) use ($size, $color) {
+            $sizeMatches = (! $variant->size && ! $size) || (strcasecmp((string) $variant->size, (string) $size) === 0);
+            $colorMatches = (! $variant->color && ! $color) || (strcasecmp((string) $variant->color, (string) $color) === 0);
+
+            return $sizeMatches && $colorMatches;
+        });
+    }
+
+    public function syncVariantStock(): void
+    {
+        if ($this->hasVariants()) {
+            $this->update(['stock' => (int) $this->variants()->sum('stock')]);
+        }
+    }
+
+    public function updateRating(): void
+    {
+        $avg = $this->reviews()->avg('rating');
+        $this->update([
+            'rating' => $avg !== null ? round((float) $avg, 1) : 0,
+        ]);
+    }
+
     public function getPriceLabelAttribute(): string
     {
         return 'Rp '.number_format($this->price, 0, ',', '.');

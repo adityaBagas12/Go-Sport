@@ -7,39 +7,39 @@
     $isCod = $payment->payment_method === 'cod';
 @endphp
 
-<div class="rounded-3xl border border-[#8CC4FF] bg-white p-6 shadow-sm">
-    <h2 class="flex items-center gap-2 text-lg font-extrabold text-[#0A2A5E]">
-        <x-icon :name="$isCod ? 'truck' : 'credit-card'" class="h-5 w-5 text-[#0A6CFF]" />
+<div class="rounded-3xl border border-[#D5E0D8] bg-white p-6 shadow-sm">
+    <h2 class="flex items-center gap-2 text-lg font-extrabold text-[#1E2B24]">
+        <x-icon :name="$isCod ? 'truck' : 'credit-card'" class="h-5 w-5 text-[#4F7A63]" />
         {{ $payment->methodLabel() }}
     </h2>
 
     {{-- Detail metode yang benar-benar dipilih customer, berasal dari Midtrans --}}
     @if ($payment->payment_type)
-        <div class="mt-5 grid gap-px overflow-hidden rounded-2xl border border-[#8CC4FF] bg-[#8CC4FF] sm:grid-cols-2">
-            <div class="bg-[#E6F1FF] p-4">
-                <p class="text-xs font-bold uppercase tracking-wide text-[#0A6CFF]">Metode Pembayaran</p>
-                <p class="mt-1 text-lg font-extrabold text-[#0A2A5E]">{{ $payment->paymentTypeLabel() }}</p>
+        <div class="mt-5 grid gap-px overflow-hidden rounded-2xl border border-[#D5E0D8] bg-[#D5E0D8] sm:grid-cols-2">
+            <div class="bg-[#F6F9F7] p-4">
+                <p class="text-xs font-bold uppercase tracking-wide text-[#4F7A63]">Metode Pembayaran</p>
+                <p class="mt-1 text-lg font-extrabold text-[#1E2B24]">{{ $payment->paymentTypeLabel() }}</p>
             </div>
             @if ($payment->payment_type === 'bank_transfer' && $payment->bank_name)
-                <div class="bg-[#E6F1FF] p-4">
-                    <p class="text-xs font-bold uppercase tracking-wide text-[#0A6CFF]">Bank</p>
-                    <p class="mt-1 text-lg font-extrabold uppercase text-[#0A2A5E]">{{ $payment->bank_name }}</p>
+                <div class="bg-[#F6F9F7] p-4">
+                    <p class="text-xs font-bold uppercase tracking-wide text-[#4F7A63]">Bank</p>
+                    <p class="mt-1 text-lg font-extrabold uppercase text-[#1E2B24]">{{ $payment->bank_name }}</p>
                 </div>
             @endif
             @if ($payment->hasAccountNumber())
-                <div class="bg-[#E6F1FF] p-4 sm:col-span-2">
-                    <p class="text-xs font-bold uppercase tracking-wide text-[#0A6CFF]">
+                <div class="bg-[#F6F9F7] p-4 sm:col-span-2">
+                    <p class="text-xs font-bold uppercase tracking-wide text-[#4F7A63]">
                         Nomor Virtual Account
                     </p>
-                    <p class="mt-1 select-all break-all font-mono text-xl font-extrabold tracking-wider text-[#0A2A5E]">
+                    <p class="mt-1 select-all break-all font-mono text-xl font-extrabold tracking-wider text-[#1E2B24]">
                         {{ $payment->account_number }}
                     </p>
-                    <p class="mt-1 text-xs text-neutral-500">Nomor ini diterbitkan oleh Midtrans.</p>
+                    <p class="mt-1 text-xs text-[#5A6B61]">Nomor ini diterbitkan oleh Midtrans.</p>
                 </div>
             @endif
-            <div class="bg-[#E6F1FF] p-4 sm:col-span-2">
-                <p class="text-xs font-bold uppercase tracking-wide text-[#0A6CFF]">Total yang harus dibayar</p>
-                <p class="mt-0.5 text-2xl font-black text-[#0A2A5E]">{{ $payment->amountLabel() }}</p>
+            <div class="bg-[#F6F9F7] p-4 sm:col-span-2">
+                <p class="text-xs font-bold uppercase tracking-wide text-[#4F7A63]">Total yang harus dibayar</p>
+                <p class="mt-0.5 text-2xl font-black text-[#4F7A63]">{{ $payment->amountLabel() }}</p>
             </div>
         </div>
     @endif
@@ -61,11 +61,11 @@
     {{-- Langkah pembayaran --}}
     @if ($payment->instructions && ! $payment->isPaid())
         <div class="mt-5">
-            <p class="text-sm font-bold text-neutral-900">Instruksi Pembayaran</p>
+            <p class="text-sm font-bold text-[#1E2B24]">Instruksi Pembayaran</p>
             <ol class="mt-3 space-y-2">
                 @foreach ($payment->instructions as $step)
-                    <li class="flex items-start gap-2.5 text-sm text-neutral-600">
-                        <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-50 text-[11px] font-bold text-brand-600">
+                    <li class="flex items-start gap-2.5 text-sm text-[#1E2B24]">
+                        <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#4F7A63]/10 text-[11px] font-bold text-[#4F7A63]">
                             {{ $loop->iteration }}
                         </span>
                         <span>{{ $step }}</span>
@@ -93,21 +93,21 @@
             <x-icon name="x" class="h-5 w-5" /> Batas pembayaran telah berakhir
         </div>
     @elseif ($isProcessing)
-        <div class="mt-6 flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700">
-            <x-icon name="refresh" class="h-5 w-5 animate-spin" /> Menunggu konfirmasi pembayaran dari Midtrans
+        <div class="mt-6 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-[#2F4F3E]">
+            <x-icon name="refresh" class="h-5 w-5 animate-spin text-[#4F7A63]" /> Menunggu konfirmasi pembayaran dari Midtrans
         </div>
     @endif
 
-    {{-- Tombol bayar: hanya untuk Midtrans, tombol aksen #FF7A00 dengan teks #10213F --}}
+    {{-- Tombol bayar: hanya untuk Midtrans --}}
     @if ($payment->canBePaid())
         <form action="{{ route('payment.pay', $payment->invoice_number) }}" method="POST" class="mt-6">
             @csrf
             <button type="submit"
-                class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FF7A00] px-6 py-3.5 text-sm font-black text-[#10213F] shadow-lg shadow-[#FF7A00]/30 transition hover:bg-[#ff8f26]">
-                <x-icon name="credit-card" class="h-5 w-5 text-[#10213F]" />
+                class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#4F7A63] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#4F7A63]/30 transition hover:bg-[#3E6350]">
+                <x-icon name="credit-card" class="h-5 w-5 text-white" />
                 {{ $payment->hasPaymentUrl() ? 'Lanjut ke Pembayaran' : 'Bayar Sekarang' }}
             </button>
-            <p class="mt-3 text-center text-xs text-neutral-400">
+            <p class="mt-3 text-center text-xs text-[#5A6B61]">
                 Anda akan diarahkan ke halaman pembayaran Midtrans.
             </p>
         </form>

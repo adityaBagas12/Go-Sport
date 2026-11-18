@@ -71,7 +71,7 @@ class CheckoutController extends Controller
 
         $items = empty($ids)
             ? collect()
-            : $user->cartItems()->with('product')->whereIn('id', $ids)->get();
+            : $user->cartItems()->with(['product.variants'])->whereIn('id', $ids)->get();
 
         if ($items->isEmpty()) {
             $request->session()->forget('checkout_selection');
@@ -131,6 +131,13 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($items as $item) {
+                if ($item->product->hasVariants()) {
+                    $variant = $item->product->findVariant($item->size, $item->color);
+                    if ($variant) {
+                        $variant->decrement('stock', $item->quantity);
+                    }
+                }
+
                 $item->product->decrement('stock', $item->quantity);
                 $item->product->increment('sold', $item->quantity);
 
@@ -189,8 +196,26 @@ class CheckoutController extends Controller
     private function findStockShortage(Collection $items): ?string
     {
         foreach ($items as $item) {
-            if ($item->quantity > $item->product->stock) {
-                return "Stok \"{$item->product->name}\" tidak mencukupi. Tersisa {$item->product->stock}, dipesan {$item->quantity}.";
+            $product = $item->product;
+            if (! $product) {
+                continue;
+            }
+
+            if ($product->hasVariants()) {
+                $variant = $product->findVariant($item->size, $item->color);
+                if ($variant) {
+                    if ($item->quantity > $variant->stock) {
+                        $label = $variant->label ? " ({$variant->label})" : '';
+
+                        return "Stok \"{$product->name}\"{$label} tidak mencukupi. Tersisa {$variant->stock}, dipesan {$item->quantity}.";
+                    }
+                } elseif (! empty($product->sizes) || ! empty($product->colors)) {
+                    return "Varian untuk \"{$product->name}\" tidak valid atau tidak tersedia.";
+                }
+            }
+
+            if ($item->quantity > $product->stock) {
+                return "Stok \"{$product->name}\" tidak mencukupi. Tersisa {$product->stock}, dipesan {$item->quantity}.";
             }
         }
 

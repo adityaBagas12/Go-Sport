@@ -82,8 +82,10 @@ class ProductSeeder extends Seeder
 
             $isFeatured = $index <= 8;
             $sold = fake()->numberBetween(20, 500);
-            $rating = fake()->randomFloat(1, 4.3, 5.0);
+            $rating = 0;
             $sizes = $sizesOptions[$sizeKey] ?? null;
+
+            $productColors = $sizes ? array_slice($colors, 0, fake()->numberBetween(2, 5)) : null;
 
             $product = Product::updateOrCreate(
                 ['slug' => Str::slug($name)],
@@ -98,7 +100,7 @@ class ProductSeeder extends Seeder
                     'rating' => $rating,
                     'sold' => $sold,
                     'sizes' => $sizes,
-                    'colors' => $sizes ? array_slice($colors, 0, fake()->numberBetween(2, 5)) : null,
+                    'colors' => $productColors,
                     'badge' => $badge,
                     'image' => $categoryImages[$categorySlug] ?? null,
                     'is_featured' => $isFeatured,
@@ -107,6 +109,32 @@ class ProductSeeder extends Seeder
             );
 
             $product->images()->delete();
+
+            $product->variants()->delete();
+            if (! empty($sizes) || ! empty($productColors)) {
+                $variantList = [];
+                $sizesList = ! empty($sizes) ? $sizes : [null];
+                $colorsList = ! empty($productColors) ? $productColors : [null];
+                $totalCombos = count($sizesList) * count($colorsList);
+                $baseVariantStock = max(1, (int) floor($stock / max(1, $totalCombos)));
+
+                foreach ($sizesList as $s) {
+                    foreach ($colorsList as $c) {
+                        $variantList[] = [
+                            'size' => $s,
+                            'color' => $c,
+                            'stock' => $baseVariantStock,
+                            'price' => null,
+                            'sku' => strtoupper(Str::slug($name)).'-'.strtoupper($s ?? 'ALL').'-'.strtoupper($c ?? 'ALL'),
+                        ];
+                    }
+                }
+
+                $product->variants()->createMany($variantList);
+                $product->update([
+                    'stock' => $product->variants()->sum('stock'),
+                ]);
+            }
         }
     }
 }

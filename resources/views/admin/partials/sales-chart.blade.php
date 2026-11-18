@@ -47,7 +47,7 @@
         </defs>
 
         <line x1="0" y1="100" x2="100" y2="100" vector-effect="non-scaling-stroke"
-            stroke="var(--color-neutral-200)" stroke-width="1" />
+            stroke="var(--color-line)" stroke-width="1" />
 
         <path d="{{ $areaPath }}" fill="url(#salesChartFill)" />
         <polyline points="{{ $linePoints }}" fill="none" vector-effect="non-scaling-stroke"
@@ -61,11 +61,11 @@
                 aria-label="{{ $point['tooltip'] }} - {{ $point['revenue_label'] }}"></span>
 
             <span
-                class="pointer-events-none absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#0A6CFF] opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+                class="pointer-events-none absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#4F7A63] opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
                 style="top: {{ $coordinate['y'] }}%;"></span>
 
             <span
-                class="pointer-events-none absolute bottom-full z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-[#0A2A5E] px-2.5 py-1 text-[11px] font-bold text-white shadow-md group-hover:block group-focus-within:block">
+                class="pointer-events-none absolute bottom-full z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-[#2F4F3E] px-2.5 py-1 text-[11px] font-bold text-white shadow-md group-hover:block group-focus-within:block">
                 {{ $point['tooltip'] }} &middot; {{ $point['revenue_label'] }}
             </span>
         </div>
@@ -74,7 +74,7 @@
 
 <div class="mt-2 flex w-full">
     @foreach ($points as $index => $point)
-        <span class="flex-1 truncate text-center text-[11px] font-medium text-neutral-400">
+        <span class="flex-1 truncate text-center text-[11px] font-medium text-[#5A6B61]">
             {{ $index % $labelStride === 0 ? $point['label'] : '' }}
         </span>
     @endforeach

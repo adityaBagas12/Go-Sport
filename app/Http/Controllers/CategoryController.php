@@ -18,7 +18,7 @@ class CategoryController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        $products = Product::with('category')
+        $products = Product::with(['category', 'variants'])
             ->where('is_active', true)
             ->where('category_id', $category->id)
             ->orderByDesc('sold')

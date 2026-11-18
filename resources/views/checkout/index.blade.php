@@ -3,14 +3,14 @@
 @section('title', 'Checkout - GoSport')
 
 @section('content')
-    <div class="border-b border-[#8CC4FF]/40 bg-white">
+    <div class="border-b border-[#D5E0D8] bg-white">
         <div class="container-page py-8">
-            <nav class="flex items-center gap-2 text-sm text-[#0A6CFF]">
-                <a href="{{ route('cart.index') }}" class="hover:text-[#3D9BFF]">Keranjang</a>
-                <x-icon name="chevron-right" class="h-4 w-4 text-[#8CC4FF]" />
-                <span class="font-bold text-[#0A2A5E]">Checkout</span>
+            <nav class="flex items-center gap-2 text-sm text-[#4F7A63]">
+                <a href="{{ route('cart.index') }}" class="hover:underline">Keranjang</a>
+                <x-icon name="chevron-right" class="h-4 w-4 text-[#5A6B61]" />
+                <span class="font-bold text-[#1E2B24]">Checkout</span>
             </nav>
-            <h1 class="mt-3 text-3xl font-extrabold text-[#0A2A5E]">Checkout</h1>
+            <h1 class="mt-3 text-3xl font-extrabold text-[#1E2B24]">Checkout</h1>
         </div>
     </div>
 
@@ -22,42 +22,42 @@
         <div class="container-page grid gap-8 py-10 lg:grid-cols-[1fr_400px]">
             <div class="space-y-6">
                 @if ($addresses->count())
-                    <div class="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
-                        <h2 class="text-lg font-extrabold text-neutral-900">Alamat Tersimpan</h2>
-                        <p class="mt-1 text-sm text-neutral-500">Pilih alamat untuk mengisi form secara otomatis.</p>
+                    <div class="rounded-3xl border border-[#D5E0D8] bg-white p-6 shadow-sm">
+                        <h2 class="text-lg font-extrabold text-[#1E2B24]">Alamat Tersimpan</h2>
+                        <p class="mt-1 text-sm text-[#5A6B61]">Pilih alamat untuk mengisi form secara otomatis.</p>
                         <div class="mt-4 grid gap-3 sm:grid-cols-2">
                             @foreach ($addresses as $address)
                                 <button type="button"
-                                    class="rounded-2xl border border-neutral-200 p-4 text-left transition hover:border-brand-500 hover:bg-brand-50/40"
+                                    class="rounded-2xl border border-[#D5E0D8] p-4 text-left transition hover:border-[#4F7A63] hover:bg-[#4F7A63]/5"
                                     data-address="{{ json_encode(['recipient_name' => $address->recipient_name, 'recipient_phone' => $address->phone, 'province' => $address->province, 'city' => $address->city, 'district' => $address->district, 'postal_code' => $address->postal_code, 'full_address' => $address->full_address]) }}">
-                                    <p class="text-sm font-bold text-neutral-900">{{ $address->label }}</p>
-                                    <p class="mt-1 text-xs text-neutral-500">{{ $address->recipient_name }} &middot; {{ $address->phone }}</p>
-                                    <p class="mt-1 line-clamp-2 text-xs text-neutral-500">{{ $address->full_address }}, {{ $address->district }}, {{ $address->city }}, {{ $address->province }} {{ $address->postal_code }}</p>
+                                    <p class="text-sm font-bold text-[#1E2B24]">{{ $address->label }}</p>
+                                    <p class="mt-1 text-xs text-[#5A6B61]">{{ $address->recipient_name }} &middot; {{ $address->phone }}</p>
+                                    <p class="mt-1 line-clamp-2 text-xs text-[#5A6B61]">{{ $address->full_address }}, {{ $address->district }}, {{ $address->city }}, {{ $address->province }} {{ $address->postal_code }}</p>
                                 </button>
                             @endforeach
                         </div>
                     </div>
                 @endif
 
-                <div class="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
-                    <h2 class="flex items-center gap-2 text-lg font-extrabold text-neutral-900">
-                        <x-icon name="map-pin" class="h-5 w-5 text-brand-500" /> Alamat Pengiriman
+                <div class="rounded-3xl border border-[#D5E0D8] bg-white p-6 shadow-sm">
+                    <h2 class="flex items-center gap-2 text-lg font-extrabold text-[#1E2B24]">
+                        <x-icon name="map-pin" class="h-5 w-5 text-[#4F7A63]" /> Alamat Pengiriman
                     </h2>
                     <div class="mt-5 grid gap-4 sm:grid-cols-2">
                         <div>
-                            <label class="text-sm font-semibold text-neutral-700">Nama Penerima</label>
+                            <label class="text-sm font-semibold text-[#1E2B24]">Nama Penerima</label>
                             <input type="text" name="recipient_name" id="field-recipient_name" value="{{ old('recipient_name', auth()->user()->name) }}" required
-                                class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                                class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white focus:ring-2 focus:ring-[#4F7A63]/20">
                         </div>
                         <div>
-                            <label class="text-sm font-semibold text-neutral-700">Nomor Telepon</label>
+                            <label class="text-sm font-semibold text-[#1E2B24]">Nomor Telepon</label>
                             <input type="text" name="recipient_phone" id="field-recipient_phone" value="{{ old('recipient_phone', auth()->user()->phone) }}" required
-                                class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                                class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white focus:ring-2 focus:ring-[#4F7A63]/20">
                         </div>
                         <div>
-                            <label class="text-sm font-semibold text-neutral-700">Provinsi</label>
+                            <label class="text-sm font-semibold text-[#1E2B24]">Provinsi</label>
                             <select name="province" id="field-province" required
-                                class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                                class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white">
                                 <option value="">Pilih provinsi</option>
                                 @foreach ($shippingRegions as $region)
                                     <optgroup label="{{ $region['name'] }}">
@@ -72,66 +72,66 @@
                             @enderror
                         </div>
                         <div>
-                            <label class="text-sm font-semibold text-neutral-700">Kota / Kabupaten</label>
+                            <label class="text-sm font-semibold text-[#1E2B24]">Kota / Kabupaten</label>
                             <input type="text" name="city" id="field-city" value="{{ old('city') }}" required placeholder="Jakarta Pusat"
-                                class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                                class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white focus:ring-2 focus:ring-[#4F7A63]/20">
                         </div>
                         <div>
-                            <label class="text-sm font-semibold text-neutral-700">Kecamatan</label>
+                            <label class="text-sm font-semibold text-[#1E2B24]">Kecamatan</label>
                             <input type="text" name="district" id="field-district" value="{{ old('district') }}" required placeholder="Menteng"
-                                class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                                class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white focus:ring-2 focus:ring-[#4F7A63]/20">
                         </div>
                         <div>
-                            <label class="text-sm font-semibold text-neutral-700">Kode Pos</label>
+                            <label class="text-sm font-semibold text-[#1E2B24]">Kode Pos</label>
                             <input type="text" name="postal_code" id="field-postal_code" value="{{ old('postal_code') }}" required placeholder="10220"
-                                class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">
+                                class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white focus:ring-2 focus:ring-[#4F7A63]/20">
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="text-sm font-semibold text-neutral-700">Alamat Lengkap</label>
+                            <label class="text-sm font-semibold text-[#1E2B24]">Alamat Lengkap</label>
                             <textarea name="full_address" id="field-full_address" rows="3" required placeholder="Nama jalan, nomor rumah, RT/RW, patokan..."
-                                class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">{{ old('full_address') }}</textarea>
+                                class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white focus:ring-2 focus:ring-[#4F7A63]/20">{{ old('full_address') }}</textarea>
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="text-sm font-semibold text-neutral-700">Catatan (opsional)</label>
+                            <label class="text-sm font-semibold text-[#1E2B24]">Catatan (opsional)</label>
                             <textarea name="note" rows="2" placeholder="Catatan untuk kurir atau penjual"
-                                class="mt-1.5 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:bg-white">{{ old('note') }}</textarea>
+                                class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white focus:ring-2 focus:ring-[#4F7A63]/20">{{ old('note') }}</textarea>
                         </div>
                     </div>
                 </div>
 
-                <div class="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
-                    <h2 class="flex items-center gap-2 text-lg font-extrabold text-neutral-900">
-                        <x-icon name="truck" class="h-5 w-5 text-brand-500" /> Jasa Pengiriman
+                <div class="rounded-3xl border border-[#D5E0D8] bg-white p-6 shadow-sm">
+                    <h2 class="flex items-center gap-2 text-lg font-extrabold text-[#1E2B24]">
+                        <x-icon name="truck" class="h-5 w-5 text-[#4F7A63]" /> Jasa Pengiriman
                     </h2>
                     <div class="mt-5 space-y-3" id="shipping-options">
-                        <p class="rounded-xl bg-neutral-50 p-4 text-sm text-neutral-500">Pilih provinsi untuk melihat ongkir.</p>
+                        <p class="rounded-xl bg-[#F6F9F7] p-4 text-sm text-[#5A6B61]">Pilih provinsi untuk melihat ongkir.</p>
                     </div>
                     <input type="hidden" name="courier" id="input-courier">
                     <input type="hidden" name="service" id="input-service">
                 </div>
 
-                <div class="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
-                    <h2 class="flex items-center gap-2 text-lg font-extrabold text-neutral-900">
-                        <x-icon name="credit-card" class="h-5 w-5 text-brand-500" /> Metode Pembayaran
+                <div class="rounded-3xl border border-[#D5E0D8] bg-white p-6 shadow-sm">
+                    <h2 class="flex items-center gap-2 text-lg font-extrabold text-[#1E2B24]">
+                        <x-icon name="credit-card" class="h-5 w-5 text-[#4F7A63]" /> Metode Pembayaran
                     </h2>
 
                     <div class="mt-5 space-y-3">
                         @foreach ($paymentMethods as $value => $label)
-                            <label class="block cursor-pointer rounded-2xl border border-neutral-200 p-4 transition hover:border-brand-400 has-checked:border-brand-500 has-checked:bg-brand-50/50">
+                            <label class="block cursor-pointer rounded-2xl border border-[#D5E0D8] p-4 transition hover:border-[#4F7A63] has-checked:border-[#4F7A63] has-checked:bg-[#4F7A63]/5">
                                 <span class="flex items-center gap-4">
                                     <input type="radio" name="payment_method" value="{{ $value }}" @checked(old('payment_method', $value === 'midtrans') === $value)
-                                        class="h-4 w-4 border-neutral-300 text-brand-500 focus:ring-brand-500" required>
-                                    <span class="text-sm font-semibold text-neutral-800">{{ $label }}</span>
+                                        class="h-4 w-4 border-[#D5E0D8] text-[#4F7A63] focus:ring-[#4F7A63]" required>
+                                    <span class="text-sm font-semibold text-[#1E2B24]">{{ $label }}</span>
                                 </span>
 
                                 @if ($value === 'midtrans')
-                                    <span class="mt-3 block border-t border-neutral-200 pt-3 text-xs text-neutral-500">
+                                    <span class="mt-3 block border-t border-[#D5E0D8] pt-3 text-xs text-[#5A6B61]">
                                         Anda akan diarahkan ke halaman pembayaran Midtrans untuk memilih sendiri
                                         metode pembayaran: transfer bank, virtual account, QRIS, GoPay, atau e-wallet
                                         lain yang tersedia.
                                     </span>
                                 @else
-                                    <span class="mt-3 block border-t border-neutral-200 pt-3 text-xs text-neutral-500">
+                                    <span class="mt-3 block border-t border-[#D5E0D8] pt-3 text-xs text-[#5A6B61]">
                                         Bayar tunai kepada kurir saat pesanan diterima. Pesanan diproses setelah
                                         pembayaran diterima.
                                     </span>
@@ -143,53 +143,52 @@
             </div>
 
             <aside class="space-y-5 lg:sticky lg:top-32 lg:self-start">
-                <div class="rounded-3xl border border-neutral-100 bg-white p-6 shadow-sm">
-                    <h2 class="text-lg font-extrabold text-neutral-900">Ringkasan Pesanan</h2>
+                <div class="rounded-3xl border border-[#D5E0D8] bg-white p-6 shadow-sm">
+                    <h2 class="text-lg font-extrabold text-[#1E2B24]">Ringkasan Pesanan</h2>
 
                     <div class="mt-4 max-h-72 space-y-4 overflow-y-auto pr-1">
                         @foreach ($items as $item)
                             <div class="flex gap-3">
                                 <img src="{{ $item->product->image }}" alt="{{ $item->product->name }}" class="h-16 w-16 shrink-0 rounded-xl object-cover">
                                 <div class="min-w-0 flex-1">
-                                    <p class="line-clamp-2 text-sm font-semibold text-neutral-900">{{ $item->product->name }}</p>
-                                    <p class="mt-0.5 text-xs text-neutral-500">
+                                    <p class="line-clamp-2 text-sm font-semibold text-[#1E2B24]">{{ $item->product->name }}</p>
+                                    <p class="mt-0.5 text-xs text-[#5A6B61]">
                                         {{ $item->quantity }}x
                                         @if ($item->size) &middot; {{ $item->size }} @endif
                                         @if ($item->color) &middot; {{ $item->color }} @endif
                                     </p>
-                                    <p class="mt-1 text-sm font-bold text-neutral-900">{{ 'Rp ' . number_format($item->subtotal, 0, ',', '.') }}</p>
+                                    <p class="mt-1 text-sm font-bold text-[#1E2B24]">{{ 'Rp ' . number_format($item->subtotal, 0, ',', '.') }}</p>
                                 </div>
                             </div>
                         @endforeach
                     </div>
 
-                    <dl class="mt-5 space-y-3 border-t border-neutral-100 pt-5 text-sm">
+                    <dl class="mt-5 space-y-3 border-t border-[#D5E0D8] pt-5 text-sm">
                         <div class="flex justify-between">
-                            <dt class="text-neutral-500">Subtotal</dt>
-                            <dd class="font-semibold text-neutral-900">{{ 'Rp ' . number_format($subtotal, 0, ',', '.') }}</dd>
+                            <dt class="text-[#5A6B61]">Subtotal</dt>
+                            <dd class="font-semibold text-[#1E2B24]">{{ 'Rp ' . number_format($subtotal, 0, ',', '.') }}</dd>
                         </div>
                         @if ($discount > 0)
-                            <div class="flex justify-between text-green-600">
+                            <div class="flex justify-between text-[#4F7A63]">
                                 <dt>Diskon Voucher</dt>
                                 <dd class="font-semibold">- {{ 'Rp ' . number_format($discount, 0, ',', '.') }}</dd>
                             </div>
                         @endif
                         <div class="flex justify-between">
-                            <dt class="text-neutral-500">Biaya Pengiriman</dt>
-                            <dd class="font-semibold text-neutral-900" id="summary-shipping">-</dd>
+                            <dt class="text-[#5A6B61]">Biaya Pengiriman</dt>
+                            <dd class="font-semibold text-[#1E2B24]" id="summary-shipping">-</dd>
                         </div>
-                        <div class="flex justify-between border-t border-[#8CC4FF]/40 pt-3 text-base">
-                            <dt class="font-bold text-[#10213F]">Total Pembayaran</dt>
-                            <dd class="font-black text-[#0A2A5E]" id="summary-total">{{ 'Rp ' . number_format(max($subtotal - $discount, 0), 0, ',', '.') }}</dd>
+                        <div class="flex justify-between border-t border-[#D5E0D8] pt-3 text-base">
+                            <dt class="font-bold text-[#1E2B24]">Total Pembayaran</dt>
+                            <dd class="font-black text-[#1E2B24]" id="summary-total">{{ 'Rp ' . number_format(max($subtotal - $discount, 0), 0, ',', '.') }}</dd>
                         </div>
                     </dl>
 
-                    {{-- Tombol Aksen: Checkout #FF7A00 dengan teks #10213F --}}
                     <button type="submit"
-                        class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#FF7A00] px-6 py-3.5 text-sm font-black text-[#10213F] shadow-lg shadow-[#FF7A00]/30 transition hover:bg-[#ff8f26]">
-                        Buat Pesanan & Bayar <x-icon name="arrow-right" class="h-5 w-5 text-[#10213F]" />
+                        class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#4F7A63] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#4F7A63]/30 transition hover:bg-[#3E6350]">
+                        Buat Pesanan & Bayar <x-icon name="arrow-right" class="h-5 w-5 text-white" />
                     </button>
-                    <p class="mt-3 text-center text-xs text-neutral-400">Dengan membuat pesanan, kamu menyetujui syarat & ketentuan GoSport.</p>
+                    <p class="mt-3 text-center text-xs text-[#5A6B61]">Dengan membuat pesanan, kamu menyetujui syarat & ketentuan GoSport.</p>
                 </div>
             </aside>
         </div>
@@ -230,7 +229,7 @@
             totalLabel.textContent = rupiah(baseTotal);
 
             if (! region) {
-                shippingOptionsContainer.innerHTML = '<p class="rounded-xl bg-neutral-50 p-4 text-sm text-neutral-500">Pilih provinsi untuk melihat ongkir.</p>';
+                shippingOptionsContainer.innerHTML = '<p class="rounded-xl bg-[#F6F9F7] p-4 text-sm text-[#5A6B61]">Pilih provinsi untuk melihat ongkir.</p>';
 
                 return;
             }
@@ -239,14 +238,14 @@
                 Object.entries(courier.services).forEach(([service, fee]) => {
                     const shippingFee = fee + region.surcharge;
                     const option = document.createElement('label');
-                    option.className = 'flex cursor-pointer items-center gap-4 rounded-2xl border border-neutral-200 p-4 transition hover:border-brand-400 has-checked:border-brand-500 has-checked:bg-brand-50/50';
+                    option.className = 'flex cursor-pointer items-center gap-4 rounded-2xl border border-[#D5E0D8] p-4 transition hover:border-[#4F7A63] has-checked:border-[#4F7A63] has-checked:bg-[#4F7A63]/5';
                     option.innerHTML = `
-                        <input type="radio" name="courier_service" value="${courier.code}|${service}" data-fee="${shippingFee}" class="h-4 w-4 border-neutral-300 text-brand-500 focus:ring-brand-500" required>
+                        <input type="radio" name="courier_service" value="${courier.code}|${service}" data-fee="${shippingFee}" class="h-4 w-4 border-[#D5E0D8] text-[#4F7A63] focus:ring-[#4F7A63]" required>
                         <span class="flex-1">
-                            <span class="block text-sm font-bold text-neutral-900">${courier.name} - ${service}</span>
-                            <span class="block text-xs text-neutral-500">${region.name} · Estimasi 1-4 hari kerja</span>
+                            <span class="block text-sm font-bold text-[#1E2B24]">${courier.name} - ${service}</span>
+                            <span class="block text-xs text-[#5A6B61]">${region.name} · Estimasi 1-4 hari kerja</span>
                         </span>
-                        <span class="text-sm font-extrabold text-neutral-900">${rupiah(shippingFee)}</span>`;
+                        <span class="text-sm font-extrabold text-[#1E2B24]">${rupiah(shippingFee)}</span>`;
                     const radio = option.querySelector('input');
                     radio.checked = courier.code === oldCourier && service === oldService;
                     shippingOptionsContainer.append(option);
@@ -276,8 +275,8 @@
                     if (field) field.value = value;
                 });
                 provinceInput.dispatchEvent(new Event('change'));
-                document.querySelectorAll('[data-address]').forEach((b) => b.classList.remove('border-brand-500', 'bg-brand-50/60'));
-                button.classList.add('border-brand-500', 'bg-brand-50/60');
+                document.querySelectorAll('[data-address]').forEach((b) => b.classList.remove('border-[#4F7A63]', 'bg-[#4F7A63]/10'));
+                button.classList.add('border-[#4F7A63]', 'bg-[#4F7A63]/10');
             });
         });
     </script>

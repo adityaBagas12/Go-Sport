@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Payment\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,7 +20,14 @@ class AccountController extends Controller
 
     public function orders(Request $request)
     {
-        $orders = $request->user()->orders()->with('items')->latest()->paginate(10);
+        $orders = $request->user()->orders()->with(['items', 'payment'])->latest()->paginate(10);
+
+        foreach ($orders as $order) {
+            if ($order->status === 'menunggu_pembayaran' && $order->payment?->payment_method === 'midtrans') {
+                app(PaymentService::class)->syncWithMidtrans($order->payment);
+                $order->refresh();
+            }
+        }
 
         return view('account.orders', compact('orders'));
     }

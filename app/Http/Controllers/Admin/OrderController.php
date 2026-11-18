@@ -13,7 +13,7 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        $orders = Order::with('user')
+        $orders = Order::with(['user', 'payment'])
             ->when($request->filled('status'), function ($query) use ($request) {
                 $query->where('status', $request->status);
             })
@@ -24,6 +24,13 @@ class OrderController extends Controller
             ->paginate(15)
             ->withQueryString();
 
+        foreach ($orders as $order) {
+            if ($order->status === 'menunggu_pembayaran' && $order->payment?->payment_method === 'midtrans') {
+                $this->payments->syncWithMidtrans($order->payment);
+                $order->refresh();
+            }
+        }
+
         $statuses = Order::STATUSES;
 
         return view('admin.orders.index', compact('orders', 'statuses'));
@@ -32,6 +39,11 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order->load(['user', 'items', 'payment']);
+
+        if ($order->status === 'menunggu_pembayaran' && $order->payment?->payment_method === 'midtrans') {
+            $this->payments->syncWithMidtrans($order->payment);
+            $order->refresh();
+        }
 
         return view('admin.orders.show', compact('order'));
     }
@@ -49,7 +61,14 @@ class OrderController extends Controller
         }
 
         if ($order->payment->payment_method === 'midtrans') {
-            return back()->with('error', 'Status pembayaran Midtrans hanya dapat diverifikasi otomatis melalui webhook notifikasi resmi Midtrans.');
+            $payment = $this->payments->syncWithMidtrans($order->payment);
+            $order->refresh();
+
+            if ($payment->isPaid()) {
+                return back()->with('success', "Status Midtrans berhasil disinkronkan: LUNAS ({$payment->transaction_status}). Pesanan otomatis diubah ke 'Diproses'.");
+            }
+
+            return back()->with('error', 'Status Midtrans: '.($payment->transaction_status ?? 'belum ada pembayaran').'. Pembayaran belum terkonfirmasi oleh Midtrans.');
         }
 
         $this->payments->markAsPaid($order->payment);
@@ -86,6 +105,13 @@ class OrderController extends Controller
     {
         foreach ($order->items as $item) {
             if ($item->product) {
+                if ($item->product->hasVariants()) {
+                    $variant = $item->product->findVariant($item->size, $item->color);
+                    if ($variant) {
+                        $variant->increment('stock', $item->quantity);
+                    }
+                }
+
                 $item->product->increment('stock', $item->quantity);
                 $item->product->decrement('sold', $item->quantity);
             }

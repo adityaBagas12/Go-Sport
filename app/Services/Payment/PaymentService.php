@@ -4,6 +4,7 @@ namespace App\Services\Payment;
 
 use App\Models\Order;
 use App\Models\Payment;
+use App\Services\MidtransService;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
@@ -119,6 +120,42 @@ class PaymentService
         ]);
 
         return $payment->fresh();
+    }
+
+    /**
+     * Memeriksa dan menyinkronkan status pembayaran langsung ke API Midtrans.
+     * Sangat berguna saat webhook belum/tidak sampai ke server (mis. di lingkungan localhost).
+     */
+    public function syncWithMidtrans(Payment $payment): Payment
+    {
+        if ($payment->isPaid()) {
+            return $payment;
+        }
+
+        $order = $payment->order;
+        if (! $order) {
+            return $payment;
+        }
+
+        /** @var MidtransService $midtrans */
+        $midtrans = app(MidtransService::class);
+        if (! $midtrans->isConfigured()) {
+            return $payment;
+        }
+
+        $statusObject = $midtrans->status($order->order_number);
+        if (! $statusObject) {
+            return $payment;
+        }
+
+        $payload = json_decode(json_encode($statusObject), true);
+        if (! is_array($payload)) {
+            return $payment;
+        }
+
+        $result = $this->handleMidtransNotification($payload);
+
+        return $result['payment'] ?? $payment->fresh();
     }
 
     /**
@@ -273,6 +310,8 @@ class PaymentService
      */
     private function storeGatewayData(Payment $payment, array $payload): void
     {
+        $va = isset($payload['va_numbers'][0]) && is_array($payload['va_numbers'][0]) ? $payload['va_numbers'][0] : null;
+
         $payment->update(array_filter([
             'gateway' => 'midtrans',
             'gateway_reference' => $payload['transaction_id'] ?? null,
@@ -280,8 +319,8 @@ class PaymentService
             'payment_type' => $payload['payment_type'] ?? null,
             'transaction_status' => $payload['transaction_status'] ?? null,
             'fraud_status' => $payload['fraud_status'] ?? null,
-            'bank_name' => $payload['bank'] ?? null,
-            'account_number' => $payload['va_number'] ?? $payload['account_number'] ?? null,
+            'bank_name' => $payload['bank'] ?? ($va['bank'] ?? null),
+            'account_number' => $payload['va_number'] ?? $payload['account_number'] ?? ($va['va_number'] ?? null),
             'midtrans_payload' => $payload ?: null,
         ], fn ($value) => $value !== null));
     }

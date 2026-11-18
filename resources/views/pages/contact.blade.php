@@ -3,11 +3,11 @@
 @section('title', 'Kontak - GoSport')
 
 @section('content')
-    <div class="border-b border-[#8CC4FF]/30 bg-white">
+    <div class="border-b border-[#D5E0D8] bg-white">
         <div class="container-page py-10 text-center">
-            <p class="text-sm font-bold uppercase tracking-wider text-[#0A6CFF]">Kontak</p>
-            <h1 class="mt-2 text-3xl font-extrabold text-[#0A2A5E] sm:text-4xl">Hubungi GoSport</h1>
-            <p class="mx-auto mt-3 max-w-xl text-neutral-600">
+            <p class="text-sm font-bold uppercase tracking-wider text-[#4F7A63]">Kontak</p>
+            <h1 class="mt-2 text-3xl font-extrabold text-[#1E2B24] sm:text-4xl">Hubungi GoSport</h1>
+            <p class="mx-auto mt-3 max-w-xl text-[#5A6B61]">
                 Ada pertanyaan tentang produk, pesanan, atau pengiriman? Tim kami siap membantu.
             </p>
         </div>
@@ -21,48 +21,48 @@
                 ['mail', 'Email', 'cs@gosport.id / support@gosport.id'],
                 ['clock', 'Jam Operasional', 'Senin - Minggu, 08.00 - 21.00 WIB'],
             ] as [$icon, $title, $desc])
-                <div class="flex items-start gap-4 rounded-2xl border border-[#8CC4FF] bg-white p-5 shadow-sm">
-                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#E6F1FF] text-[#0A6CFF]">
+                <div class="flex items-start gap-4 rounded-2xl border border-[#D5E0D8] bg-white p-5 shadow-sm">
+                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#4F7A63]/10 text-[#4F7A63]">
                         <x-icon :name="$icon" class="h-6 w-6" />
                     </span>
                     <div>
-                        <p class="text-sm font-bold text-[#10213F]">{{ $title }}</p>
-                        <p class="mt-1 text-sm text-neutral-500">{{ $desc }}</p>
+                        <p class="text-sm font-bold text-[#1E2B24]">{{ $title }}</p>
+                        <p class="mt-1 text-sm text-[#5A6B61]">{{ $desc }}</p>
                     </div>
                 </div>
             @endforeach
 
             <div class="flex gap-3">
                 @foreach (['facebook', 'instagram', 'youtube', 'whatsapp'] as $social)
-                    <a href="#" class="grid h-11 w-11 place-items-center rounded-xl bg-[#0A2A5E] text-white transition hover:bg-[#0A6CFF]">
+                    <a href="#" class="grid h-11 w-11 place-items-center rounded-xl bg-[#2F4F3E] text-white transition hover:bg-[#4F7A63]">
                         <x-icon :name="$social" class="h-5 w-5" />
                     </a>
                 @endforeach
             </div>
         </div>
 
-        <div class="rounded-3xl border border-[#8CC4FF] bg-white p-7 shadow-sm">
-            <h2 class="text-xl font-extrabold text-[#0A2A5E]">Kirim Pesan</h2>
+        <div class="rounded-3xl border border-[#D5E0D8] bg-white p-7 shadow-sm">
+            <h2 class="text-xl font-extrabold text-[#1E2B24]">Kirim Pesan</h2>
             <form class="mt-6 space-y-4" onsubmit="event.preventDefault(); this.reset(); alert('Pesan kamu sudah terkirim. Tim GoSport akan segera menghubungi kamu.');">
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="text-sm font-semibold text-[#10213F]">Nama Lengkap</label>
-                        <input type="text" required class="mt-1.5 w-full rounded-xl border border-[#8CC4FF]/60 bg-[#F4F8FF] px-4 py-3 text-sm outline-none focus:border-[#0A6CFF] focus:bg-white">
+                        <label class="text-sm font-semibold text-[#1E2B24]">Nama Lengkap</label>
+                        <input type="text" required class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white">
                     </div>
                     <div>
-                        <label class="text-sm font-semibold text-[#10213F]">Email</label>
-                        <input type="email" required class="mt-1.5 w-full rounded-xl border border-[#8CC4FF]/60 bg-[#F4F8FF] px-4 py-3 text-sm outline-none focus:border-[#0A6CFF] focus:bg-white">
+                        <label class="text-sm font-semibold text-[#1E2B24]">Email</label>
+                        <input type="email" required class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white">
                     </div>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-[#10213F]">Subjek</label>
-                    <input type="text" required class="mt-1.5 w-full rounded-xl border border-[#8CC4FF]/60 bg-[#F4F8FF] px-4 py-3 text-sm outline-none focus:border-[#0A6CFF] focus:bg-white">
+                    <label class="text-sm font-semibold text-[#1E2B24]">Subjek</label>
+                    <input type="text" required class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white">
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-[#10213F]">Pesan</label>
-                    <textarea rows="5" required class="mt-1.5 w-full rounded-xl border border-[#8CC4FF]/60 bg-[#F4F8FF] px-4 py-3 text-sm outline-none focus:border-[#0A6CFF] focus:bg-white"></textarea>
+                    <label class="text-sm font-semibold text-[#1E2B24]">Pesan</label>
+                    <textarea rows="5" required class="mt-1.5 w-full rounded-xl border border-[#D5E0D8] bg-[#F6F9F7] px-4 py-3 text-sm text-[#1E2B24] outline-none focus:border-[#4F7A63] focus:bg-white"></textarea>
                 </div>
-                <button type="submit" class="w-full rounded-xl bg-[#0A6CFF] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#3D9BFF]">
+                <button type="submit" class="w-full rounded-xl bg-[#4F7A63] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#3E6350]">
                     Kirim Pesan
                 </button>
             </form>

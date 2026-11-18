@@ -12,6 +12,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
@@ -108,6 +109,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/pesanan/{orderNumber}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/pesanan/{orderNumber}/batal', [OrderController::class, 'cancel'])->name('order.cancel');
+    Route::post('/ulasan', [ReviewController::class, 'store'])->name('reviews.store');
 
     // Halaman invoice + tombol "Bayar Sekarang" yang mengarahkan customer
     // ke halaman pembayaran Midtrans.

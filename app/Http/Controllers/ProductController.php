@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::with('category')
+        $products = Product::with(['category', 'variants'])
             ->where('is_active', true)
             ->when($request->filled('search'), function ($query) use ($request) {
                 $query->where('name', 'like', '%'.$request->search.'%');
@@ -52,7 +52,7 @@ class ProductController extends Controller
 
     public function show(Request $request, $slug)
     {
-        $product = Product::with(['category', 'images', 'reviews'])
+        $product = Product::with(['category', 'images', 'reviews', 'variants'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Product;
 
 class PageController extends Controller
@@ -18,13 +19,21 @@ class PageController extends Controller
 
     public function promo()
     {
-        $products = Product::with('category')
+        $coupons = Coupon::where('is_active', true)->latest()->get();
+
+        $products = Product::with(['category', 'variants'])
             ->where('is_active', true)
-            ->whereNotNull('compare_price')
-            ->whereColumn('compare_price', '>', 'price')
+            ->where(function ($query) {
+                $query->where(function ($sub) {
+                    $sub->whereNotNull('compare_price')
+                        ->whereColumn('compare_price', '>', 'price');
+                })->orWhere('badge', 'promo');
+            })
             ->orderByDesc('sold')
             ->paginate(12);
 
-        return view('pages.promo', compact('products'));
+        $maxDiscount = $coupons->where('type', 'percent')->max('value');
+
+        return view('pages.promo', compact('products', 'coupons', 'maxDiscount'));
     }
 }

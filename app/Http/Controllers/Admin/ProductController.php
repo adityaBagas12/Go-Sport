@@ -12,7 +12,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::with('category')
+        $products = Product::with(['category', 'variants'])
             ->when($request->filled('search'), function ($query) use ($request) {
                 $query->where('name', 'like', '%'.$request->search.'%');
             })
@@ -44,11 +44,13 @@ class ProductController extends Controller
             'specification' => 'nullable|string',
             'price' => 'required|integer|min:0',
             'compare_price' => 'nullable|integer|gte:price',
-            'stock' => 'required|integer|min:0',
-            'sizes' => 'nullable|array',
-            'sizes.*' => 'string|max:10',
-            'colors' => 'nullable|array',
-            'colors.*' => 'string|max:50',
+            'stock' => 'nullable|integer|min:0',
+            'has_variants' => 'nullable|boolean',
+            'variants' => 'nullable|array',
+            'variants.*.size' => 'nullable|string|max:20',
+            'variants.*.color' => 'nullable|string|max:50',
+            'variants.*.stock' => 'nullable|integer|min:0',
+            'variants.*.price' => 'nullable|integer|min:0',
             'badge' => 'nullable|in:baru,terlaris,promo',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
             'image_url' => 'nullable|string|max:500',
@@ -69,7 +71,35 @@ class ProductController extends Controller
         }
         unset($data['image_url']);
 
-        Product::create($data);
+        $hasVariants = $request->boolean('has_variants') && ! empty($request->input('variants'));
+        $variantsInput = $hasVariants ? $request->input('variants', []) : [];
+
+        if ($hasVariants && ! empty($variantsInput)) {
+            $data['stock'] = (int) collect($variantsInput)->sum(fn ($v) => (int) ($v['stock'] ?? 0));
+            $data['sizes'] = collect($variantsInput)->pluck('size')->filter(fn ($v) => filled($v))->unique()->values()->all() ?: null;
+            $data['colors'] = collect($variantsInput)->pluck('color')->filter(fn ($v) => filled($v))->unique()->values()->all() ?: null;
+        } else {
+            $data['stock'] = (int) ($request->input('stock') ?? 0);
+            $data['sizes'] = null;
+            $data['colors'] = null;
+        }
+
+        unset($data['has_variants'], $data['variants']);
+
+        $product = Product::create($data);
+
+        if ($hasVariants && ! empty($variantsInput)) {
+            foreach ($variantsInput as $v) {
+                if (filled($v['size'] ?? null) || filled($v['color'] ?? null) || isset($v['stock'])) {
+                    $product->variants()->create([
+                        'size' => filled($v['size'] ?? null) ? trim($v['size']) : null,
+                        'color' => filled($v['color'] ?? null) ? trim($v['color']) : null,
+                        'stock' => (int) ($v['stock'] ?? 0),
+                        'price' => ! empty($v['price']) ? (int) $v['price'] : null,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
@@ -77,6 +107,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
+        $product->load('variants');
 
         return view('admin.products.edit', compact('product', 'categories'));
     }
@@ -90,11 +121,13 @@ class ProductController extends Controller
             'specification' => 'nullable|string',
             'price' => 'required|integer|min:0',
             'compare_price' => 'nullable|integer|gte:price',
-            'stock' => 'required|integer|min:0',
-            'sizes' => 'nullable|array',
-            'sizes.*' => 'string|max:10',
-            'colors' => 'nullable|array',
-            'colors.*' => 'string|max:50',
+            'stock' => 'nullable|integer|min:0',
+            'has_variants' => 'nullable|boolean',
+            'variants' => 'nullable|array',
+            'variants.*.size' => 'nullable|string|max:20',
+            'variants.*.color' => 'nullable|string|max:50',
+            'variants.*.stock' => 'nullable|integer|min:0',
+            'variants.*.price' => 'nullable|integer|min:0',
             'badge' => 'nullable|in:baru,terlaris,promo',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
             'image_url' => 'nullable|string|max:500',
@@ -114,7 +147,36 @@ class ProductController extends Controller
         }
         unset($data['image_url']);
 
+        $hasVariants = $request->boolean('has_variants') && ! empty($request->input('variants'));
+        $variantsInput = $hasVariants ? $request->input('variants', []) : [];
+
+        if ($hasVariants && ! empty($variantsInput)) {
+            $data['stock'] = (int) collect($variantsInput)->sum(fn ($v) => (int) ($v['stock'] ?? 0));
+            $data['sizes'] = collect($variantsInput)->pluck('size')->filter(fn ($v) => filled($v))->unique()->values()->all() ?: null;
+            $data['colors'] = collect($variantsInput)->pluck('color')->filter(fn ($v) => filled($v))->unique()->values()->all() ?: null;
+        } else {
+            $data['stock'] = (int) ($request->input('stock') ?? 0);
+            $data['sizes'] = null;
+            $data['colors'] = null;
+        }
+
+        unset($data['has_variants'], $data['variants']);
+
         $product->update($data);
+
+        $product->variants()->delete();
+        if ($hasVariants && ! empty($variantsInput)) {
+            foreach ($variantsInput as $v) {
+                if (filled($v['size'] ?? null) || filled($v['color'] ?? null) || isset($v['stock'])) {
+                    $product->variants()->create([
+                        'size' => filled($v['size'] ?? null) ? trim($v['size']) : null,
+                        'color' => filled($v['color'] ?? null) ? trim($v['color']) : null,
+                        'stock' => (int) ($v['stock'] ?? 0),
+                        'price' => ! empty($v['price']) ? (int) $v['price'] : null,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
     }

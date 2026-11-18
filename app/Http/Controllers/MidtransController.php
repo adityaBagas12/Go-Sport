@@ -76,11 +76,22 @@ class MidtransController extends Controller
      */
     public function finish(Request $request)
     {
+        $order = $this->findInvoiceFromCallback($request);
+
+        if ($order && $order->payment && ! $order->payment->isPaid()) {
+            $this->payments->syncWithMidtrans($order->payment);
+            $order->refresh();
+        }
+
+        $isPaid = $order?->payment?->isPaid();
+
         return view('midtrans.callback', [
-            'tone' => 'success',
-            'title' => 'Pembayaran dikirim',
-            'message' => 'Pembayaran Anda sudah dikirim ke Midtrans. Status invoice akan diperbarui otomatis setelah Midtrans mengonfirmasi pembayaran.',
-            'invoice' => $this->findInvoiceFromCallback($request),
+            'tone' => $isPaid ? 'success' : 'info',
+            'title' => $isPaid ? 'Pembayaran Berhasil' : 'Pembayaran dikirim',
+            'message' => $isPaid
+                ? 'Pembayaran Anda telah berhasil diverifikasi oleh Midtrans. Pesanan Anda saat ini sedang diproses.'
+                : 'Pembayaran Anda sudah dikirim ke Midtrans. Status invoice akan diperbarui otomatis setelah Midtrans mengonfirmasi pembayaran.',
+            'invoice' => $order,
         ]);
     }
 
@@ -124,9 +135,13 @@ class MidtransController extends Controller
             return null;
         }
 
-        return $request->user()
-            ?->orders()
-            ->where('order_number', $orderId)
-            ->first();
+        if ($request->user()) {
+            $order = $request->user()->orders()->where('order_number', $orderId)->first();
+            if ($order) {
+                return $order;
+            }
+        }
+
+        return Order::where('order_number', $orderId)->first();
     }
 }

@@ -25,6 +25,10 @@ class PaymentController extends Controller
     {
         $payment = $this->findOwnedPayment($request, $invoiceNumber, true);
 
+        if (! $payment->isPaid() && $payment->payment_method === 'midtrans') {
+            $payment = $this->payments->syncWithMidtrans($payment);
+        }
+
         return view('invoice.show', compact('payment'));
     }
 

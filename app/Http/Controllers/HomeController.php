@@ -11,19 +11,19 @@ class HomeController extends Controller
     {
         $categories = Category::withCount('products')->orderBy('name')->get();
 
-        $latestProducts = Product::with('category')
+        $latestProducts = Product::with(['category', 'variants'])
             ->where('is_active', true)
             ->orderByDesc('created_at')
             ->take(8)
             ->get();
 
-        $bestSellers = Product::with('category')
+        $bestSellers = Product::with(['category', 'variants'])
             ->where('is_active', true)
             ->orderByDesc('sold')
             ->take(8)
             ->get();
 
-        $promoProducts = Product::with('category')
+        $promoProducts = Product::with(['category', 'variants'])
             ->where('is_active', true)
             ->where(function ($query) {
                 $query->whereNotNull('compare_price')
@@ -33,7 +33,7 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
-        $featured = Product::with('category')
+        $featured = Product::with(['category', 'variants'])
             ->where('is_active', true)
             ->where('is_featured', true)
             ->orderByDesc('sold')

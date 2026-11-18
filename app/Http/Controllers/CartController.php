@@ -39,23 +39,51 @@ class CartController extends Controller
             'color' => 'nullable|string|max:50',
         ]);
 
-        $product = Product::findOrFail($request->product_id);
+        $product = Product::with('variants')->findOrFail($request->product_id);
 
-        if ($product->stock <= 0) {
+        $selectedSize = $request->size;
+        $selectedColor = $request->color;
+
+        $variant = null;
+        if ($product->hasVariants()) {
+            if ($request->filled('size') || $request->filled('color')) {
+                $variant = $product->findVariant($request->size, $request->color);
+            } else {
+                // Jika ditambahkan langsung dari katalog/home tanpa memilih varian,
+                // gunakan varian pertama yang masih memiliki stok.
+                $variant = $product->variants->firstWhere('stock', '>', 0) ?? $product->variants->first();
+            }
+
+            if ($variant) {
+                if ($variant->stock <= 0) {
+                    $variantLabel = $variant->label ? " varian ({$variant->label})" : '';
+
+                    return back()->with('error', "Stok \"{$product->name}\"{$variantLabel} saat ini habis.");
+                }
+
+                $selectedSize = $selectedSize ?: $variant->size;
+                $selectedColor = $selectedColor ?: $variant->color;
+            } elseif (! empty($product->sizes) || ! empty($product->colors)) {
+                return back()->with('error', 'Varian produk yang dipilih tidak valid atau tidak tersedia.');
+            }
+        } elseif ($product->stock <= 0) {
             return back()->with('error', "Stok \"{$product->name}\" saat ini habis.");
         }
 
         $cartItem = Auth::user()->cartItems()
             ->where('product_id', $product->id)
-            ->where('size', $request->size ?? null)
-            ->where('color', $request->color ?? null)
+            ->where('size', $selectedSize ?? null)
+            ->where('color', $selectedColor ?? null)
             ->first();
 
         $currentQty = $cartItem ? $cartItem->quantity : 0;
         $totalQty = $currentQty + (int) $request->quantity;
 
-        if ($totalQty > $product->stock) {
-            return back()->with('error', "Jumlah melebihi stok yang tersedia. Stok tersisa {$product->stock} unit".($currentQty > 0 ? " (sudah ada {$currentQty} di keranjang)." : '.'));
+        $availableStock = $variant ? $variant->stock : $product->stock;
+        $stockContext = $variant && $variant->label ? " varian ({$variant->label})" : '';
+
+        if ($totalQty > $availableStock) {
+            return back()->with('error', "Jumlah melebihi stok{$stockContext} yang tersedia. Stok tersisa {$availableStock} unit".($currentQty > 0 ? " (sudah ada {$currentQty} di keranjang)." : '.'));
         }
 
         if ($cartItem) {
@@ -63,13 +91,14 @@ class CartController extends Controller
         } else {
             $cartItem = Auth::user()->cartItems()->create([
                 'product_id' => $product->id,
-                'size' => $request->size,
-                'color' => $request->color,
+                'size' => $selectedSize,
+                'color' => $selectedColor,
                 'quantity' => $request->quantity,
             ]);
         }
 
-        $request->session()->flash('success', 'Produk berhasil ditambahkan ke keranjang.');
+        $variantMsg = $variant && $variant->label ? " ({$variant->label})" : '';
+        $request->session()->flash('success', "Produk \"{$product->name}\"{$variantMsg} berhasil ditambahkan ke keranjang.");
 
         if ($request->input('redirect') === 'cart') {
             return redirect()->route('cart.index');
@@ -92,10 +121,22 @@ class CartController extends Controller
         $user = Auth::user();
 
         foreach ($request->quantity as $id => $quantity) {
-            $item = $user->cartItems()->with('product')->findOrFail($id);
+            $item = $user->cartItems()->with(['product.variants'])->findOrFail($id);
+            $product = $item->product;
 
-            if ($quantity > $item->product->stock) {
-                return back()->with('error', "Stok \"{$item->product->name}\" tidak mencukupi. Tersisa {$item->product->stock} unit.");
+            $availableStock = $product->stock;
+            $stockContext = '';
+
+            if ($product->hasVariants()) {
+                $variant = $product->findVariant($item->size, $item->color);
+                if ($variant) {
+                    $availableStock = $variant->stock;
+                    $stockContext = $variant->label ? " ({$variant->label})" : '';
+                }
+            }
+
+            if ($quantity > $availableStock) {
+                return back()->with('error', "Stok \"{$product->name}\"{$stockContext} tidak mencukupi. Tersisa {$availableStock} unit.");
             }
         }
 

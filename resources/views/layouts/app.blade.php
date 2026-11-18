@@ -12,7 +12,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
 </head>
-<body class="min-h-screen flex flex-col bg-[#F4F8FF] text-[#10213F]">
+<body class="min-h-screen flex flex-col bg-[#F6F9F7] text-[#1E2B24]">
     @include('partials.header')
 
     @include('partials.flash')
@@ -20,6 +20,8 @@
     <main class="flex-1">
         @yield('content')
     </main>
+
+    @include('partials.variant-modal')
 
     @include('partials.footer')
 
