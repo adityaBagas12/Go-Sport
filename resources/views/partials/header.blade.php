@@ -72,6 +72,9 @@
                         <a href="{{ route('account.wishlist') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-[#1E2B24] hover:bg-[#F6F9F7]">
                             <x-icon name="heart" class="h-5 w-5 text-[#4F7A63]" /> Wishlist
                         </a>
+                        <a href="{{ route('account.messages') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-[#1E2B24] hover:bg-[#F6F9F7]">
+                            <x-icon name="mail" class="h-5 w-5 text-[#4F7A63]" /> Pesan & Bantuan
+                        </a>
                         <form action="{{ route('logout') }}" method="POST" class="border-t border-[#D5E0D8]">
                             @csrf
                             <button type="submit" class="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-[#E53935] hover:bg-red-50">

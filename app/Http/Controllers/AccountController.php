@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactMessage;
 use App\Services\Payment\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,8 +15,12 @@ class AccountController extends Controller
         $orders = $user->orders()->latest()->take(5)->get();
         $wishlistCount = $user->wishlists()->count();
         $addressCount = $user->addresses()->count();
+        $unreadReplyCount = ContactMessage::where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->orWhere('email', $user->email);
+        })->whereNotNull('admin_reply')->whereNull('customer_read_at')->count();
 
-        return view('account.dashboard', compact('orders', 'wishlistCount', 'addressCount'));
+        return view('account.dashboard', compact('orders', 'wishlistCount', 'addressCount', 'unreadReplyCount'));
     }
 
     public function orders(Request $request)
@@ -109,5 +114,36 @@ class AccountController extends Controller
         $request->user()->addresses()->where('id', $id)->delete();
 
         return back()->with('success', 'Alamat dihapus.');
+    }
+
+    public function messages(Request $request)
+    {
+        $user = $request->user();
+        $messages = ContactMessage::where('user_id', $user->id)
+            ->orWhere('email', $user->email)
+            ->latest()
+            ->paginate(10);
+
+        return view('account.messages', compact('messages'));
+    }
+
+    public function showMessage(Request $request, ContactMessage $message)
+    {
+        $user = $request->user();
+
+        if ($message->user_id !== $user->id && strtolower($message->email) !== strtolower($user->email)) {
+            abort(403, 'Anda tidak berhak melihat pesan ini.');
+        }
+
+        if ($message->isReplied() && ! $message->customer_read_at) {
+            $message->update(['customer_read_at' => now()]);
+        }
+
+        $message->load('repliedByUser');
+
+        return view('account.message-show', [
+            'contactMessage' => $message,
+            'message' => $message,
+        ]);
     }
 }

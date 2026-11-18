@@ -23,22 +23,31 @@
             </div>
 
             @php
+                $unreadMessageCount = \App\Models\ContactMessage::unread()->count();
                 $adminMenu = [
-                    ['admin.dashboard', 'grid', 'Dashboard'],
-                    ['admin.products.index', 'box', 'Produk'],
-                    ['admin.categories.index', 'tag', 'Kategori'],
-                    ['admin.orders.index', 'clipboard', 'Pesanan'],
-                    ['admin.customers.index', 'users', 'Customer'],
-                    ['admin.coupons.index', 'ticket', 'Voucher & Promo'],
+                    ['admin.dashboard', 'grid', 'Dashboard', null],
+                    ['admin.products.index', 'box', 'Produk', null],
+                    ['admin.categories.index', 'tag', 'Kategori', null],
+                    ['admin.orders.index', 'clipboard', 'Pesanan', null],
+                    ['admin.customers.index', 'users', 'Customer', null],
+                    ['admin.coupons.index', 'ticket', 'Voucher & Promo', null],
+                    ['admin.messages.index', 'mail', 'Pesan Kontak', $unreadMessageCount],
                 ];
             @endphp
 
             <nav class="space-y-1 p-4">
-                @foreach ($adminMenu as [$route, $icon, $label])
+                @foreach ($adminMenu as [$route, $icon, $label, $badge])
                     <a href="{{ route($route) }}"
-                        class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $route)) || request()->routeIs($route) ? 'bg-[#4F7A63] text-white shadow-sm' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
-                        <x-icon :name="$icon" class="h-5 w-5" />
-                        {{ $label }}
+                        class="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $route)) || request()->routeIs($route) ? 'bg-[#4F7A63] text-white shadow-sm' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
+                        <div class="flex items-center gap-3">
+                            <x-icon :name="$icon" class="h-5 w-5" />
+                            {{ $label }}
+                        </div>
+                        @if ($badge && $badge > 0)
+                            <span class="grid h-5 min-w-[20px] place-items-center rounded-full bg-[#E53935] px-1.5 text-[11px] font-bold text-white shadow-sm">
+                                {{ $badge }}
+                            </span>
+                        @endif
                     </a>
                 @endforeach
             </nav>

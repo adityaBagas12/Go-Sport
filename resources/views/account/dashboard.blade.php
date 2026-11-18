@@ -4,6 +4,24 @@
 @section('title', 'Akun Saya - GoSport')
 
 @section('account-content')
+    @if (!empty($unreadReplyCount) && $unreadReplyCount > 0)
+        <div class="mb-6 flex items-center justify-between gap-4 rounded-3xl border border-emerald-300 bg-emerald-50 p-5 shadow-sm">
+            <div class="flex items-center gap-3">
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-[#4F7A63] text-white shadow-sm">
+                    <x-icon name="mail" class="h-5 w-5" />
+                </span>
+                <div>
+                    <p class="text-sm font-extrabold text-[#1E2B24]">Ada {{ $unreadReplyCount }} Balasan Baru dari Admin GoSport!</p>
+                    <p class="text-xs text-[#5A6B61]">Pertanyaan yang Anda ajukan telah dijawab oleh customer support kami.</p>
+                </div>
+            </div>
+            <a href="{{ route('account.messages') }}"
+                class="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-[#4F7A63] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#3E6350]">
+                Lihat Jawaban <x-icon name="arrow-right" class="h-3.5 w-3.5" />
+            </a>
+        </div>
+    @endif
+
     <div class="grid gap-4 sm:grid-cols-3">
         @foreach ([
             ['clipboard', $orders->count(), 'Total Pesanan'],

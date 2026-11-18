@@ -33,6 +33,7 @@ Route::get('/kategori/{slug}', [CategoryController::class, 'show'])->name('categ
 Route::get('/promo', [PageController::class, 'promo'])->name('pages.promo');
 Route::get('/tentang-kami', [PageController::class, 'about'])->name('pages.about');
 Route::get('/kontak', [PageController::class, 'contact'])->name('pages.contact');
+Route::post('/kontak', [PageController::class, 'sendContact'])->middleware('throttle:10,1')->name('pages.contact.send');
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +106,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
         Route::get('/pesanan', [AccountController::class, 'orders'])->name('orders');
+        Route::get('/pesan', [AccountController::class, 'messages'])->name('messages');
+        Route::get('/pesan/{message}', [AccountController::class, 'showMessage'])->name('messages.show');
     });
 
     Route::get('/pesanan/{orderNumber}', [OrderController::class, 'show'])->name('order.show');
@@ -145,4 +148,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::get('/customers', [Admin\CustomerController::class, 'index'])->name('customers.index');
     Route::get('/customers/{customer}', [Admin\CustomerController::class, 'show'])->name('customers.show');
+
+    Route::get('/messages', [Admin\ContactMessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{message}', [Admin\ContactMessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{message}/reply', [Admin\ContactMessageController::class, 'reply'])->name('messages.reply');
+    Route::delete('/messages/{message}', [Admin\ContactMessageController::class, 'destroy'])->name('messages.destroy');
 });

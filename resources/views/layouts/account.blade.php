@@ -26,22 +26,35 @@
                 </div>
 
                 @php
+                    $unreadReplies = \App\Models\ContactMessage::where(function ($query) {
+                        $query->where('user_id', auth()->id())
+                            ->orWhere('email', auth()->user()->email);
+                    })->whereNotNull('admin_reply')->whereNull('customer_read_at')->count();
+
                     $menu = [
-                        ['account.dashboard', 'grid', 'Dashboard'],
-                        ['account.profile', 'user', 'Profil Saya'],
-                        ['account.addresses', 'map-pin', 'Alamat Saya'],
-                        ['account.orders', 'clipboard', 'Riwayat Pesanan'],
-                        ['account.wishlist', 'heart', 'Wishlist'],
-                        ['cart.index', 'cart', 'Keranjang'],
+                        ['account.dashboard', 'grid', 'Dashboard', null],
+                        ['account.profile', 'user', 'Profil Saya', null],
+                        ['account.addresses', 'map-pin', 'Alamat Saya', null],
+                        ['account.orders', 'clipboard', 'Riwayat Pesanan', null],
+                        ['account.wishlist', 'heart', 'Wishlist', null],
+                        ['account.messages', 'mail', 'Pesan & Bantuan', $unreadReplies],
+                        ['cart.index', 'cart', 'Keranjang', null],
                     ];
                 @endphp
 
                 <nav class="mt-3 space-y-1">
-                    @foreach ($menu as [$route, $icon, $label])
+                    @foreach ($menu as [$route, $icon, $label, $badge])
                         <a href="{{ route($route) }}"
-                            class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs($route) ? 'border border-[#4F7A63]/30 bg-[#4F7A63]/10 text-[#4F7A63]' : 'text-[#1E2B24] hover:bg-[#F6F9F7] hover:text-[#4F7A63]' }}">
-                            <x-icon :name="$icon" class="h-5 w-5 {{ request()->routeIs($route) ? 'text-[#4F7A63]' : 'text-[#5A6B61]' }}" />
-                            {{ $label }}
+                            class="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs($route) || (request()->routeIs('account.messages.*') && $route === 'account.messages') ? 'border border-[#4F7A63]/30 bg-[#4F7A63]/10 text-[#4F7A63]' : 'text-[#1E2B24] hover:bg-[#F6F9F7] hover:text-[#4F7A63]' }}">
+                            <div class="flex items-center gap-3">
+                                <x-icon :name="$icon" class="h-5 w-5 {{ request()->routeIs($route) || (request()->routeIs('account.messages.*') && $route === 'account.messages') ? 'text-[#4F7A63]' : 'text-[#5A6B61]' }}" />
+                                {{ $label }}
+                            </div>
+                            @if ($badge && $badge > 0)
+                                <span class="grid h-5 min-w-[20px] place-items-center rounded-full bg-[#E53935] px-1.5 text-[11px] font-bold text-white shadow-sm">
+                                    {{ $badge }}
+                                </span>
+                            @endif
                         </a>
                     @endforeach
                     @if (auth()->user()->isAdmin())

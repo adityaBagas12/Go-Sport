@@ -47,6 +47,7 @@ Admin bertanggung jawab atas manajemen operasional toko daring:
   - Update status pesanan (`menunggu_pembayaran`, `diproses`, `dikirim`, `selesai`, `dibatalkan`).
   - Sinkronisasi status pembayaran langsung ke server API Midtrans (`verifyPayment` / `syncWithMidtrans`).
   - Proteksi: Pesanan metode Midtrans tidak bisa diubah lunas sembarangan tanpa verifikasi gateway.
+- **Pesan Masuk Kontak**: Melihat pesan pertanyaan atau bantuan dari pelanggan, membaca detail pesan, badge pesan belum dibaca, dan balas langsung via email.
 - **Manajemen Voucher / Kupon Promo**: CRUD kupon diskon (persentase atau nominal rupiah) dengan kuota dan masa berlaku.
 - **Data Pelanggan**: Melihat daftar pelanggan terdaftar beserta riwayat transaksinya.
 
