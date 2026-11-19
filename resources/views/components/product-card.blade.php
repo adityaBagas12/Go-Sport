@@ -8,11 +8,6 @@
     ];
     $badgeLabels = ['baru' => 'Baru', 'terlaris' => 'Terlaris', 'promo' => 'Promo'];
     $wishlisted = $product->isWishlisted();
-    $defaultVariant = $product->hasVariants()
-        ? ($product->relationLoaded('variants')
-            ? $product->variants->firstWhere('stock', '>', 0) ?? $product->variants->first()
-            : $product->variants()->where('stock', '>', 0)->first() ?? $product->variants()->first())
-        : null;
 @endphp
 
 <div class="group relative flex flex-col overflow-hidden rounded-2xl border border-[#D5E0D8] bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#4F7A63] hover:shadow-xl">
@@ -75,15 +70,6 @@
         </div>
 
         <div class="mt-4 grid grid-cols-2 gap-2 pt-1">
-            <form action="{{ route('cart.add') }}" method="POST">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="quantity" value="1">
-                @if ($defaultVariant)
-                    <input type="hidden" name="size" value="{{ $defaultVariant->size }}">
-                    <input type="hidden" name="color" value="{{ $defaultVariant->color }}">
-                @endif
-                <button type="submit" @disabled($product->stock <= 0)
             @if ($product->hasVariants())
                 <button type="button"
                     data-quick-variant
@@ -99,7 +85,6 @@
                     class="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#4F7A63] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#3E6350] disabled:cursor-not-allowed disabled:bg-neutral-300">
                     <x-icon name="cart" class="h-4 w-4" /> Keranjang
                 </button>
-            </form>
             @else
                 <form action="{{ route('cart.add') }}" method="POST">
                     @csrf

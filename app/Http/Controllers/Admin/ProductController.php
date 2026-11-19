@@ -76,7 +76,8 @@ class ProductController extends Controller
 
         if ($hasVariants && ! empty($variantsInput)) {
             $data['stock'] = (int) collect($variantsInput)->sum(fn ($v) => (int) ($v['stock'] ?? 0));
-            $data['sizes'] = collect($variantsInput)->pluck('size')->filter(fn ($v) => filled($v))->unique()->values()->all() ?: null;
+            $extractedSizes = collect($variantsInput)->pluck('size')->filter(fn ($v) => filled($v))->unique()->values()->all();
+            $data['sizes'] = ! empty($extractedSizes) ? Product::sortSizes($extractedSizes) : null;
             $data['colors'] = collect($variantsInput)->pluck('color')->filter(fn ($v) => filled($v))->unique()->values()->all() ?: null;
         } else {
             $data['stock'] = (int) ($request->input('stock') ?? 0);
@@ -152,7 +153,8 @@ class ProductController extends Controller
 
         if ($hasVariants && ! empty($variantsInput)) {
             $data['stock'] = (int) collect($variantsInput)->sum(fn ($v) => (int) ($v['stock'] ?? 0));
-            $data['sizes'] = collect($variantsInput)->pluck('size')->filter(fn ($v) => filled($v))->unique()->values()->all() ?: null;
+            $extractedSizes = collect($variantsInput)->pluck('size')->filter(fn ($v) => filled($v))->unique()->values()->all();
+            $data['sizes'] = ! empty($extractedSizes) ? Product::sortSizes($extractedSizes) : null;
             $data['colors'] = collect($variantsInput)->pluck('color')->filter(fn ($v) => filled($v))->unique()->values()->all() ?: null;
         } else {
             $data['stock'] = (int) ($request->input('stock') ?? 0);

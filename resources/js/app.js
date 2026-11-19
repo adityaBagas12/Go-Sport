@@ -222,6 +222,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        const sortSizes = (sizes) => {
+            const rank = {
+                xxs: 1,
+                xs: 2,
+                s: 3,
+                m: 4,
+                l: 5,
+                xl: 6,
+                xxl: 7,
+                '2xl': 7,
+                xxxl: 8,
+                '3xl': 8,
+                '4xl': 9,
+                '5xl': 10,
+                'all size': 99,
+                'one size': 99,
+            };
+            return [...sizes].sort((a, b) => {
+                const aStr = String(a).trim().toLowerCase();
+                const bStr = String(b).trim().toLowerCase();
+                const aRank = rank[aStr];
+                const bRank = rank[bStr];
+                if (aRank && bRank) return aRank - bRank;
+                if (aRank) return -1;
+                if (bRank) return 1;
+                const aNum = parseFloat(aStr);
+                const bNum = parseFloat(bStr);
+                if (!isNaN(aNum) && !isNaN(bNum)) return aNum - bNum;
+                return aStr.localeCompare(bStr, undefined, { numeric: true });
+            });
+        };
+
         const openQuickModal = (data) => {
             productIdInput.value = data.productId;
             imageEl.src = data.productImage;
@@ -232,15 +264,16 @@ document.addEventListener('DOMContentLoaded', () => {
             currentVariants = data.variants || [];
             qtyInput.value = 1;
 
-            // Render Sizes
+            // Render Sizes (Urutkan dari terkecil ke terbesar)
             sizesContainer.innerHTML = '';
-            if (data.sizes && data.sizes.length > 0) {
+            const sortedSizes = sortSizes(data.sizes || []);
+            if (sortedSizes.length > 0) {
                 sizesGroup.classList.remove('hidden');
-                data.sizes.forEach((size, idx) => {
+                sortedSizes.forEach((size) => {
                     const label = document.createElement('label');
                     label.className = 'cursor-pointer';
                     label.innerHTML = `
-                        <input type="radio" name="size" value="${size}" class="peer sr-only" ${idx === 0 ? 'checked' : ''} required>
+                        <input type="radio" name="size" value="${size}" class="peer sr-only" required>
                         <span class="grid h-10 min-w-10 place-items-center rounded-xl border border-[#D5E0D8] bg-white px-3 text-xs font-bold text-[#1E2B24] transition peer-checked:border-[#4F7A63] peer-checked:bg-[#4F7A63]/10 peer-checked:text-[#4F7A63] hover:border-[#1E2B24]">
                             ${size}
                         </span>
@@ -255,11 +288,11 @@ document.addEventListener('DOMContentLoaded', () => {
             colorsContainer.innerHTML = '';
             if (data.colors && data.colors.length > 0) {
                 colorsGroup.classList.remove('hidden');
-                data.colors.forEach((color, idx) => {
+                data.colors.forEach((color) => {
                     const label = document.createElement('label');
                     label.className = 'cursor-pointer';
                     label.innerHTML = `
-                        <input type="radio" name="color" value="${color}" class="peer sr-only" ${idx === 0 ? 'checked' : ''} required>
+                        <input type="radio" name="color" value="${color}" class="peer sr-only" required>
                         <span class="inline-flex items-center rounded-xl border border-[#D5E0D8] bg-white px-3.5 py-2 text-xs font-bold text-[#1E2B24] transition peer-checked:border-[#4F7A63] peer-checked:bg-[#4F7A63]/10 peer-checked:text-[#4F7A63] hover:border-[#1E2B24]">
                             ${color}
                         </span>

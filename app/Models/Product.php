@@ -88,6 +88,78 @@ class Product extends Model
         ]);
     }
 
+    public function getSizesAttribute($value): ?array
+    {
+        $sizes = is_string($value) ? json_decode($value, true) : $value;
+
+        if (empty($sizes) && $this->relationLoaded('variants')) {
+            $sizes = $this->variants->pluck('size')->filter(fn ($v) => filled($v))->unique()->values()->all();
+        }
+
+        if (empty($sizes) || ! is_array($sizes)) {
+            return null;
+        }
+
+        return self::sortSizes($sizes);
+    }
+
+    /**
+     * Mengurutkan daftar ukuran dari yang terkecil ke yang terbesar.
+     * Contoh: ['M', 'S', 'L', 'XS', 'XL', 'XXL'] -> ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+     * Angka sepatu: ['42', '39', '44', '40'] -> ['39', '40', '42', '44']
+     */
+    public static function sortSizes(array $sizes): array
+    {
+        $order = [
+            'xxs' => 1,
+            'xs' => 2,
+            's' => 3,
+            'm' => 4,
+            'l' => 5,
+            'xl' => 6,
+            'xxl' => 7,
+            '2xl' => 7,
+            'xxxl' => 8,
+            '3xl' => 8,
+            '4xl' => 9,
+            '5xl' => 10,
+            'all size' => 99,
+            'free size' => 99,
+            'one size' => 99,
+        ];
+
+        usort($sizes, function ($a, $b) use ($order) {
+            $aTrim = strtolower(trim((string) $a));
+            $bTrim = strtolower(trim((string) $b));
+
+            $aIsApparel = isset($order[$aTrim]);
+            $bIsApparel = isset($order[$bTrim]);
+
+            if ($aIsApparel && $bIsApparel) {
+                return $order[$aTrim] <=> $order[$bTrim];
+            }
+
+            if ($aIsApparel) {
+                return -1;
+            }
+
+            if ($bIsApparel) {
+                return 1;
+            }
+
+            $aIsNumeric = is_numeric($aTrim);
+            $bIsNumeric = is_numeric($bTrim);
+
+            if ($aIsNumeric && $bIsNumeric) {
+                return (float) $aTrim <=> (float) $bTrim;
+            }
+
+            return strnatcasecmp($aTrim, $bTrim);
+        });
+
+        return array_values($sizes);
+    }
+
     public function getPriceLabelAttribute(): string
     {
         return 'Rp '.number_format($this->price, 0, ',', '.');
