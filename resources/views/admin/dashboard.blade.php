@@ -9,7 +9,7 @@
             ['users', 'Total Customer', number_format($totalCustomers, 0, ',', '.'), 'bg-emerald-50 text-emerald-700'],
             ['clipboard', 'Total Pesanan', number_format($totalOrders, 0, ',', '.'), 'bg-[#4F7A63]/15 text-[#4F7A63]'],
             ['check-circle', 'Pesanan Dibayar', number_format($paidOrders, 0, ',', '.'), 'bg-green-50 text-green-700'],
-            ['clock', 'Menunggu Bayar', number_format($pendingOrders, 0, ',', '.'), 'bg-[#E53935]/10 text-[#E53935]'],
+            ['clock', 'Menunggu Konfirmasi', number_format($pendingOrders, 0, ',', '.'), 'bg-[#E53935]/10 text-[#E53935]'],
         ] as [$icon, $label, $value, $color])
             <div class="rounded-3xl border border-[#D5E0D8] bg-white p-5 shadow-sm">
                 <span class="grid h-11 w-11 place-items-center rounded-2xl {{ $color }}">
@@ -26,7 +26,7 @@
             class="mt-6 flex items-center gap-3 rounded-2xl border border-[#D5E0D8] bg-[#F6F9F7] px-5 py-4 transition hover:bg-[#DCE8DF]/40">
             <x-icon name="clock" class="h-6 w-6 text-[#4F7A63]" />
             <p class="text-sm font-semibold text-[#1E2B24]">
-                Ada <span class="font-black text-[#4F7A63]">{{ $pendingOrders }}</span> pesanan menunggu pembayaran. Klik untuk melihat.
+                Ada <span class="font-black text-[#4F7A63]">{{ $pendingOrders }}</span> pesanan menunggu konfirmasi. Klik untuk melihat.
             </p>
         </a>
     @endif
